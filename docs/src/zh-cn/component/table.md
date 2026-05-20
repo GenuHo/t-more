@@ -4,7 +4,7 @@ title: Table
 
 # Table
 
-表格组件在 `tdesign-vue-next` 的 `Table` 组件基础上封装，封装了表格的基本布局、搜索、高级搜索、自动请求、操作列宽度自动计算等逻辑。
+表格组件在 `tdesign-vue-next` 的 `Table` 组件基础上封装，继承了 `tdesign-vue-next` 的 `Table` 组件的类型，扩展实现了表格的基本布局、搜索、高级搜索、自动请求、操作列宽度自动计算等逻辑。
 
 ## 基础使用
 
