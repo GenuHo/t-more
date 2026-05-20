@@ -13,3 +13,12 @@ title: Table
 :::demo
 table/basic
 :::
+
+## 配置操作栏
+
+`topLeftButtonDropdown` 可配置顶部左侧的操作栏。使用 [ButtonDropdown](/zh-cn/component/button-dropdown) 组件的配置。
+`topRightButtons` 配置顶部右侧的操作栏。预置了 `reset` 和 `refresh` 按钮，也可以自行配置拓展其他按钮。
+
+:::demo
+table/operation-bar
+:::

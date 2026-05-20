@@ -74,11 +74,11 @@ export interface TmTableProps<
    * 表格顶部右侧按钮配置
    * 支持预设按钮类型和自定义按钮项
    *
-   * - `'refresh'`：刷新按钮（预设）
    * - `'reset'`：重置按钮（预设）
+   * - `'refresh'`：刷新按钮（预设）
    * - `TmTableTopRightButtonItem`：自定义按钮项
    */
-  topRightButtons?: ('refresh' | 'reset' | TmTableTopRightButtonItem)[]
+  topRightButtons?: ('reset' | 'refresh' | TmTableTopRightButtonItem)[]
 
   /**
    * 表格顶部左侧下拉按钮配置
