@@ -238,7 +238,15 @@ export default defineComponent({
         <div class={ns.b()}>
           <div class={ns.e('top')}>
             <div class={ns.e('top-left')}>
-              <div ref={topLeftStartRef}>
+              <div
+                ref={topLeftStartRef}
+                class={[
+                  ns.e('top-left-start'),
+                  isNumber(topLeftStartWidth.value) &&
+                    topLeftStartWidth.value <= 0 &&
+                    ns.is('hidden'),
+                ]}
+              >
                 <TmButtonDropdown
                   {...props?.topLeftButtonDropdown}
                 ></TmButtonDropdown>

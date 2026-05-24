@@ -16,8 +16,13 @@
     display: flex;
     align-items: center;
     flex-shrink: 1;
-    overflow: hidden;
-    gap: @tm-table-space;
+    min-width: 0;
+  }
+
+  &__top-left-start {
+    &:not(.is-hidden) {
+      margin-right: @tm-table-space;
+    }
   }
 
   &__search {
@@ -28,10 +33,10 @@
 
   td .@{tm-prefix}-button-dropdown {
     .@{prefix}-button {
-      padding: 0px;
+      padding: 0;
 
       &__suffix:not(:empty) {
-        margin-left: 0px;
+        margin-left: 0;
       }
     }
   }
