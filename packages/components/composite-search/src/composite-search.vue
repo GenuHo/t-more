@@ -20,7 +20,10 @@
         <template #label>
           <t-dropdown
             trigger="hover"
-            :popupProps="{ onVisibleChange: handleDropdownVisibleChange }"
+            :popupProps="{
+              onVisibleChange: handleDropdownVisibleChange,
+            }"
+            maxColumnWidth="auto"
           >
             <div :class="ns.e('search-label')" @click.stop>
               <search-icon :class="ns.e('icon-search')" />
