@@ -72,8 +72,8 @@ const columns: TmTableCol[] = [
     colKey: 'status',
     title: 'Application Status',
     width: 120,
-    cell: (h, { rowIndex }) => {
-      const status = (rowIndex % 3) as keyof typeof statusNameListMap
+    cell: (h, { row }) => {
+      const status = row.status as keyof typeof statusNameListMap
       return (
         <t-tag
           shape="round"

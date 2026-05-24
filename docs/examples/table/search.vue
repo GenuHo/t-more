@@ -57,8 +57,8 @@ const columns: TmTableCol[] = [
         { label: 'Expired', value: 2 },
       ],
     },
-    cell: (h, { rowIndex }) => {
-      const status = (rowIndex % 3) as keyof typeof statusNameListMap
+    cell: (h, { row }) => {
+      const status = row.status as keyof typeof statusNameListMap
       return (
         <t-tag
           shape="round"
