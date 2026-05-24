@@ -135,7 +135,7 @@ export default defineComponent({
           )
         } else {
           return (
-            <TDropdown {...button.dropdownProps}>
+            <TDropdown maxColumnWidth="auto" {...button.dropdownProps}>
               {{
                 default: () => (
                   <TTooltip {...button.tooltipProps}>
@@ -157,7 +157,10 @@ export default defineComponent({
       if (moreButtons.value && moreButtons.value.length > 0) {
         const buttonProps = getButtonProps(props.moreButtonProps || {})
         return (
-          <TDropdown {...props?.moreButtonProps?.dropdownProps}>
+          <TDropdown
+            maxColumnWidth="auto"
+            {...props?.moreButtonProps?.dropdownProps}
+          >
             {{
               default: () => (
                 <TTooltip {...props?.moreButtonProps?.tooltipProps}>
