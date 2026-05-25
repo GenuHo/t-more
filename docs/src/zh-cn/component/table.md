@@ -41,6 +41,10 @@ table/search
 
 使用 `useOperationColumn` 配置表格行操作列，传入 `buttonDropdown` 定义操作按钮，按钮的 `onClick` 回调会接收到当前行数据。组件内部检测到 `colKey` 为 `TM_OPERATION_COL_KEY` 的列时，会自动计算操作列宽度以适应单元格内容。
 
+::: tip 操作列按钮样式
+`useOperationColumn` 会在渲染时自动包裹一个 `tm-table__operation-cell` 容器。组件样式通过该容器精确选中内部的按钮，去除波纹动画、hover 背景色和边框，使操作列按钮在紧凑的表格单元格中更加干净。如果不使用 `useOperationColumn` 而是自行手写操作列，则这些样式覆盖不会生效。
+:::
+
 ::: warning 注意
 配置 `columns` 时，`colKey` 不要与内置常量 `TM_OPERATION_COL_KEY`（值为 `'TM_OPERATION_COL_KEY'`）重复，否则该列会被视为操作列处理，导致渲染异常。
 :::
@@ -96,10 +100,6 @@ table/operation-column
 | 参数            | 类型              | 说明                                              |
 | --------------- | ----------------- | ------------------------------------------------- |
 | operationColumn | `PrimaryTableCol` | 操作列的完整列配置，可直接放入 `columns` 数组使用 |
-
-::: warning 注意
-配置 `columns` 时，`colKey` 不要与内置常量 `TM_OPERATION_COL_KEY`（值为 `'TM_OPERATION_COL_KEY'`）重复，否则该列会被视为操作列处理，导致渲染异常。
-:::
 
 ### TmTableInstance
 

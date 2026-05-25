@@ -31,9 +31,18 @@
     }
   }
 
-  td .@{tm-prefix}-button-dropdown {
+  .@{tm-prefix}-table__operation-cell .@{tm-prefix}-button-dropdown {
     .@{prefix}-button {
       padding: 0;
+      // https://github.com/Tencent/tdesign-vue-next/blob/develop/packages/shared/hooks/useRipple/index.ts
+      // 对应 TDesign useRipple 中 getRippleColor 取值的 CSS 变量，设为 transparent 让波纹不可见
+      --ripple-color: transparent;
+      // 去除 hover 时的背景色和边框，让操作列的按钮更干净
+      &:hover,
+      &:active {
+        background-color: transparent;
+        border-color: transparent;
+      }
 
       &__suffix:not(:empty) {
         margin-left: 0;

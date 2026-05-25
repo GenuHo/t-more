@@ -4,7 +4,7 @@ import type {
   PrimaryTableCol,
   TableRowData,
 } from 'tdesign-vue-next'
-import { useLocale } from '@tdesign-vue-next-more/hooks'
+import { useLocale, useNamespace } from '@tdesign-vue-next-more/hooks'
 import type {
   TmButtonDropdownItem,
   TmButtonDropdownItemWithCustomOnClick,
@@ -15,6 +15,7 @@ import type {
 import { TmButtonDropdown } from '@tdesign-vue-next-more/components'
 
 const { t } = useLocale()
+const ns = useNamespace('table')
 
 export const TM_OPERATION_COL_KEY = 'TM_OPERATION_COL_KEY'
 
@@ -61,12 +62,14 @@ export const useOperationColumn = <
         }
       }
       return (
-        <TmButtonDropdown
-          {...wrapper()}
-          buttonProps={
-            config.buttonDropdown?.buttonProps || operationButtonProps
-          }
-        ></TmButtonDropdown>
+        <div class={ns.e('operation-cell')}>
+          <TmButtonDropdown
+            {...wrapper()}
+            buttonProps={
+              config.buttonDropdown?.buttonProps || operationButtonProps
+            }
+          ></TmButtonDropdown>
+        </div>
       )
     },
     fixed: 'right',
