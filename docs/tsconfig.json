@@ -1,5 +1,4 @@
 {
-  // TODO add global.d.ts, jsx and tsx 中使用组件没有类型提示，packages中也有对应问题
   "include": ["**/*", ".vitepress/**/*", "../typings/global.d.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
