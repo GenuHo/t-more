@@ -59,20 +59,20 @@ table/operation-column
 
 `TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上新增了以下属性：
 
-| 参数                  | 类型                                                                                       | 默认值                 | 说明                                                                                                                 |
-| --------------------- | ------------------------------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| request               | `(params: any) => Promise<any>`                                                            | -                      | 表格数据请求接口。接收查询参数（包含分页、排序、搜索等），需返回 `{ results: any[], total: number }` 格式的数据      |
-| columns               | [`TmTableCol[]`](#tmtablecol)                                                              | -                      | 表格列配置数组，扩展了 `PrimaryTableCol`，额外支持搜索配置                                                           |
-| topRightButtons       | `('reset' \| 'refresh' \| ` [`TmTableTopRightButtonItem`](#tmtabletoprightbuttonitem)`)[]` | `['reset', 'refresh']` | 表格顶部右侧按钮配置。`'reset'` 为重置按钮，`'refresh'` 为刷新按钮，也可传入自定义按钮对象                           |
-| topLeftButtonDropdown | [`TmButtonDropdownProps`](/zh-cn/component/button-dropdown#tmbuttondropdownprops)          | -                      | 表格顶部左侧下拉按钮配置，用于配置批量操作等场景。使用 [ButtonDropdown](/zh-cn/component/button-dropdown) 组件的属性 |
+| 参数                  | 类型                                                    | 默认值                 | 说明                                                                                                                                      |
+| --------------------- | ------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| request               | `(params: any) => Promise<any>`                         | -                      | 表格数据请求接口。接收查询参数（包含分页、排序、搜索等），需返回 `{ results: any[], total: number }` 格式的数据                           |
+| columns               | `TmTableCol[]`                                          | -                      | 表格列配置数组，扩展了 [PrimaryTableCol](https://tdesign.tencent.com/vue-next/components/table?tab=api#primarytablecol)，额外支持搜索配置 |
+| topRightButtons       | `('reset' \| 'refresh' \| TmTableTopRightButtonItem)[]` | `['reset', 'refresh']` | 表格顶部右侧按钮配置。`'reset'` 为重置按钮，`'refresh'` 为刷新按钮，也可传入自定义按钮对象                                                |
+| topLeftButtonDropdown | `TmButtonDropdownProps`                                 | -                      | 表格顶部左侧下拉按钮配置，用于配置批量操作等场景。使用 [ButtonDropdown](/zh-cn/component/button-dropdown) 组件的属性                      |
 
 ### TmTableCol
 
-扩展自 `tdesign-vue-next` 的 `PrimaryTableCol`，新增搜索配置项：
+扩展自 `tdesign-vue-next` 的 [PrimaryTableCol](https://tdesign.tencent.com/vue-next/components/table?tab=api#primarytablecol)，新增搜索配置项：
 
-| 参数         | 类型                                                                                                                                | 默认值 | 说明                                                                                                                 |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
-| searchConfig | `PartialByKeys<` [`TmCompositeSearchFieldItem`](/zh-cn/component/composite-search#tmcompositesearchfielditem)`, 'field' \| 'name'>` | -      | 搜索配置项。`field` 和 `name` 非必传，默认取列的 `colKey` 和 `title` 值。支持 `input`、`single`、`multiple` 三种类型 |
+| 参数         | 类型                                                           | 默认值 | 说明                                                                                                                 |
+| ------------ | -------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
+| searchConfig | `PartialByKeys<TmCompositeSearchFieldItem, 'field' \| 'name'>` | -      | 搜索配置项。`field` 和 `name` 非必传，默认取列的 `colKey` 和 `title` 值。支持 `input`、`single`、`multiple` 三种类型 |
 
 ### TmTableTopRightButtonItem
 
@@ -92,7 +92,7 @@ table/operation-column
 
 | 参数           | 类型                                                                                            | 默认值 | 说明                                                                                        |
 | -------------- | ----------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------- |
-| column         | `Omit<` [`TmTableCol`](#tmtablecol)`, 'cell'>`                                                  | -      | 操作列的基础配置，`cell` 属性会被覆盖                                                       |
+| column         | `Omit<TmTableCol, 'cell'>`                                                                      | -      | 操作列的基础配置，`cell` 属性会被覆盖                                                       |
 | buttonDropdown | `TmButtonDropdownPropsWithCustomOnClick<(data: PrimaryTableCellParams, e: MouseEvent) => void>` | -      | 操作按钮下拉配置。按钮的 `onClick` 回调会接收当前行数据 `PrimaryTableCellParams` 和鼠标事件 |
 
 **返回值**
