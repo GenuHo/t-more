@@ -59,6 +59,7 @@
 </template>
 
 <script lang="tsx" setup>
+import { isNil } from 'lodash-unified'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useNamespace, useLocale } from '@tdesign-vue-next-more/hooks'
 import type {
@@ -168,6 +169,11 @@ const handleConfirm = () => {
   const name = currentFieldItem.value.name
   if (currentFieldItem.value.type === 'single') {
     const value = filterRecord[currentFieldItem.value.field]
+    // 未选中任何选项时走清除逻辑
+    if (isNil(value)) {
+      props?.onReset?.({ field, name })
+      return
+    }
     const label = currentFieldItem.value.list?.find(
       (item) => item.value === value,
     )?.label
@@ -178,10 +184,15 @@ const handleConfirm = () => {
       label,
     })
   } else if (currentFieldItem.value.type === 'multiple') {
+    const value = filterRecord[currentFieldItem.value.field] || []
+    // 未选中任何选项时走清除逻辑
+    if (value.length === 0) {
+      props?.onReset?.({ field, name })
+      return
+    }
     const m = new Map(
       currentFieldItem.value.list.map((item) => [item.value, item.label]),
     )
-    const value = filterRecord[currentFieldItem.value.field] || []
     const label = value.map((item: any) => m.get(item))
     props?.onSearch?.({
       field,
@@ -213,7 +224,9 @@ const getPopupContent = () => {
   const defaultValue = props.value.find(
     (item) => item.field === currentFieldItem.value?.field,
   )?.value
-  filterRecord[currentFieldItem.value.field] = defaultValue
+  if (popupVisible.value) {
+    filterRecord[currentFieldItem.value.field] = defaultValue
+  }
   const filterComponentProps: Record<string, any> = {
     options: currentFieldItem.value?.list || [],
     onChange: (val: any) => {
