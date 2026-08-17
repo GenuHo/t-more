@@ -97,8 +97,8 @@ export default defineComponent({
     const currentSearchParams = computed(() => {
       return getSearchParams()
     })
-    const selfCurrent = ref(1)
-    const selfPageSize = ref(10)
+    const selfCurrent = ref(props?.pagination?.current ?? 1)
+    const selfPageSize = ref(props?.pagination?.pageSize ?? 10)
     const total = ref(0)
     const loading = ref(false)
     const search = async () => {
