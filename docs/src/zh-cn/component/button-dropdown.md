@@ -10,7 +10,7 @@ Button组件、Dropdown组件的组合，还结合了Tooltip组件。常用于�
 
 ## 基础用法
 
-组件从左到右依次排列。可通过 `buttonProps` 属性设置所有按钮的统一配置，来预设按钮样式等基础属性，会被 buttons 中的单项配置覆盖。
+组件从左到右依次排列。可通过 `buttonProps` 属性设置所有按钮的统一配置，来预设按钮样式等基础属性，会被 buttons 中的单项配置覆盖。传入负数 `max`（例如 `-1`）可展示全部按钮，不进行折叠。
 
 :::demo
 button-dropdown/basic
@@ -44,12 +44,12 @@ button-dropdown/children
 
 ### TmButtonDropdownProps
 
-| 参数            | 类型                                  | 默认值 | 说明                                                                        |
-| --------------- | ------------------------------------- | ------ | --------------------------------------------------------------------------- |
-| max             | Number                                | 3      | 最大显示按钮数量，超出部分自动收纳到 `更多` 菜单中                          |
-| buttons         | TmButtonDropdownItem[]                | []     | 按钮数组，构成按钮组和下拉菜单项                                            |
-| buttonProps     | Omit<ButtonProps, 'onClick'>          | -      | 所有按钮的统一配置，可预设按钮样式等基础属性，会被 buttons 中的单项配置覆盖 |
-| moreButtonProps | Omit<TmButtonDropdownItem, 'onClick'> | -      | `更多` 按钮配置，用于配置自动生成的 `更多` 下拉按钮触发器                   |
+| 参数            | 类型                                  | 默认值 | 说明                                                                                                                  |
+| --------------- | ------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| max             | Number                                | 3      | 最大按钮数量（包含 `更多` 按钮），超出部分自动收纳到 `更多` 菜单中。传 0 时不展示任何按钮，传负数时展示全部按钮不折叠 |
+| buttons         | TmButtonDropdownItem[]                | []     | 按钮数组，构成按钮组和下拉菜单项                                                                                      |
+| buttonProps     | Omit<ButtonProps, 'onClick'>          | -      | 所有按钮的统一配置，可预设按钮样式等基础属性，会被 buttons 中的单项配置覆盖                                           |
+| moreButtonProps | Omit<TmButtonDropdownItem, 'onClick'> | -      | `更多` 按钮配置，用于配置自动生成的 `更多` 下拉按钮触发器                                                             |
 
 ### TmButtonDropdownItem extends [ButtonProps](https://tdesign.tencent.com/vue-next/components/button?tab=api#button-props)
 

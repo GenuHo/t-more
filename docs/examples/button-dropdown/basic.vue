@@ -1,6 +1,6 @@
 <template>
   <div class="basic-example">
-    <tm-button-dropdown :buttons="buttons1" :max="4" />
+    <tm-button-dropdown :buttons="buttons1" :max="-1" />
     <tm-button-dropdown :buttons="buttons2" :max="5" />
     <tm-button-dropdown
       :buttons="buttons3"

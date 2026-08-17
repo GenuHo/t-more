@@ -10,6 +10,12 @@
       :more-button-props="moreButtonProps2"
       :max="2"
     />
+    <tm-button-dropdown
+      :buttons="buttons2"
+      :button-props="{ theme: 'default', variant: 'dashed' }"
+      :more-button-props="moreButtonProps2"
+      :max="1"
+    />
   </div>
 </template>
 

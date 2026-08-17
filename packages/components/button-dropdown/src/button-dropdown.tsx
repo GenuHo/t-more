@@ -35,22 +35,30 @@ export default defineComponent({
     },
   },
 
-  setup(props: TmButtonDropdownProps) {
+  setup(props) {
     // 根据 max 处理出来需要渲染 button 的列表
+    // max 表示总展示按钮数量（包含"更多"按钮）；max = 0 时不展示任何按钮；max < 0 时展示全部按钮，不折叠
     const buttons = computed(() => {
-      if (props.max && props.buttons && props.buttons.length > props.max) {
-        return props.buttons?.slice(0, props.max - 1)
-      } else {
+      if (props.max < 0) {
         return props.buttons
       }
+      if (props.max === 0) {
+        return []
+      }
+      if (props.buttons && props.buttons.length > props.max) {
+        return props.buttons?.slice(0, props.max - 1)
+      }
+      return props.buttons
     })
     // 更多 buttons 的列表
     const moreButtons = computed(() => {
-      if (props.max && props.buttons && props.buttons.length > props.max) {
-        return props.buttons?.slice(props.max - 1)
-      } else {
+      if (props.max <= 0) {
         return []
       }
+      if (props.buttons && props.buttons.length > props.max) {
+        return props.buttons?.slice(props.max - 1)
+      }
+      return []
     })
     const renderContent = (content: string | TNode) => {
       if (typeof content === 'string') {

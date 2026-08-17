@@ -34,7 +34,10 @@ export interface TmButtonDropdownItem extends ButtonProps {
  * 继承自 DropdownProps
  */
 export interface TmButtonDropdownProps {
-  /** 最大显示按钮数量，超出部分自动收纳到"更多"菜单中 */
+  /**
+   * 最大按钮数量（包含"更多"按钮），超出部分自动收纳到"更多"菜单中
+   * max 为 0 时不展示任何按钮；max 为负数时展示全部按钮，不折叠
+   */
   max?: number
 
   /** 按钮数组，构成按钮组和下拉菜单项 */
