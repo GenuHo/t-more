@@ -224,7 +224,7 @@ const getPopupContent = () => {
   if (!isSingleOrMultipleFieldItem(currentFieldItem.value)) {
     return
   }
-  const defaultValue = props.value.find(
+  const defaultValue = (props.value ?? []).find(
     (item) => item.field === currentFieldItem.value?.field,
   )?.value
   if (popupVisible.value) {
