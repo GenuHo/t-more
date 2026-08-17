@@ -14,9 +14,6 @@ import type {
 } from '@tdesign-vue-next-more/components'
 import { TmButtonDropdown } from '@tdesign-vue-next-more/components'
 
-const { t } = useLocale()
-const ns = useNamespace('table')
-
 export const TM_OPERATION_COL_KEY = 'TM_OPERATION_COL_KEY'
 
 export const useOperationColumn = <
@@ -27,6 +24,8 @@ export const useOperationColumn = <
     (data: PrimaryTableCellParams<T>, e: MouseEvent) => void
   >
 }) => {
+  const { t } = useLocale()
+  const ns = useNamespace('table')
   const operationButtonProps: ButtonProps = {
     variant: 'text',
     theme: 'primary',
