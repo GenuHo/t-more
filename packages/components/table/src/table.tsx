@@ -68,18 +68,6 @@ export default defineComponent({
 
     const data = ref<TableRowData[] | undefined>()
 
-    const {
-      searchPayloads,
-      addSearchPayload,
-      removeSearchPayload,
-      clearSearchPayloads,
-      getSearchParams,
-    } = useCompositeSearch({
-      onSearchChange: () => {
-        search()
-      },
-    })
-
     const searchFields = computed(() => {
       const result: TmCompositeSearchFieldItem[] = []
       props?.columns?.forEach((column) => {
@@ -93,6 +81,18 @@ export default defineComponent({
         }
       })
       return result
+    })
+
+    const {
+      clearSearchPayloads,
+      getSearchParams,
+      compositeSearchProps,
+      compositeSearchTagsProps,
+    } = useCompositeSearch({
+      searchFields,
+      onSearchChange: () => {
+        search()
+      },
     })
 
     const currentSearchParams = computed(() => {
@@ -264,10 +264,7 @@ export default defineComponent({
               </div>
               {isTopLeftShowCompositeSearch.value && (
                 <TmCompositeSearch
-                  searchFields={searchFields.value}
-                  value={searchPayloads.value}
-                  onSearch={addSearchPayload}
-                  onReset={removeSearchPayload}
+                  {...compositeSearchProps.value}
                 ></TmCompositeSearch>
               )}
             </div>
@@ -278,16 +275,12 @@ export default defineComponent({
           <div class={ns.e('search')}>
             {!isTopLeftShowCompositeSearch.value && (
               <TmCompositeSearch
-                searchFields={searchFields.value}
-                value={searchPayloads.value}
-                onSearch={addSearchPayload}
-                onReset={removeSearchPayload}
+                {...compositeSearchProps.value}
               ></TmCompositeSearch>
             )}
             <TmCompositeSearchTags
               ref={tmCompositeSearchTagsRef}
-              value={searchPayloads.value}
-              onClose={removeSearchPayload}
+              {...compositeSearchTagsProps.value}
               onClear={handleClearSearch}
             ></TmCompositeSearchTags>
           </div>

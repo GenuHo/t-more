@@ -1,23 +1,44 @@
 // TODO 待优化性能
 import { cloneDeep } from 'lodash-unified'
 import type {
+  TmCompositeSearchFieldItem,
   TmCompositeSearchPayload,
   TmCompositeSearchPayloadValue,
+  TmCompositeSearchProps,
 } from '../composite-search-type'
-import { ref, computed } from 'vue'
+import type { MaybeRef } from 'vue'
+import { computed, ref, unref } from 'vue'
+import type { TmCompositeSearchTagsProps } from '@tdesign-vue-next-more/components'
+
+/**
+ * 组合搜索组件的绑定属性（由 compositeSearchProps 返回）
+ * 所有属性均为必填，可直接 `v-bind` 到 `<tm-composite-search>`
+ */
+type TmCompositeSearchBindProps = Required<TmCompositeSearchProps>
+
+/**
+ * 组合搜索标签组件的绑定属性（由 compositeSearchTagsProps 返回）
+ * 所有属性均为必填，可直接 `v-bind` 到 `<tm-composite-search-tags>`
+ */
+type TmCompositeSearchTagsBindProps = Required<TmCompositeSearchTagsProps>
 
 interface UseCompositeSearchOptions {
   /** 搜索参数变化时的回调 */
   onSearchChange?: (
     params: Record<string, TmCompositeSearchPayloadValue>,
   ) => void
+  /**
+   * 搜索字段配置（必填）
+   * 可直接传入数组，也可传入 Ref 或 ComputedRef，用于组装返回的 `compositeSearchProps`
+   */
+  searchFields: MaybeRef<TmCompositeSearchFieldItem[]>
 }
 
 /**
  * 组合搜索 Hook，用于管理多个搜索条件的组合查询
  * 提供搜索条件的增删改查功能，并维护搜索负载的状态
  *
- * @param {UseCompositeSearchOptions} - 可选配置选项
+ * @param {UseCompositeSearchOptions} - 配置选项，其中 searchFields 必填
  *
  * @returns {Object} 返回组合搜索相关的状态和方法
  * @returns {ComputedRef<TmCompositeSearchPayload[]>} return.searchPayloads - 当前所有搜索负载的计算属性
@@ -25,23 +46,27 @@ interface UseCompositeSearchOptions {
  * @returns {Function} return.removeSearchPayload - 移除指定搜索负载
  * @returns {Function} return.clearSearchPayloads - 清空所有搜索负载
  * @returns {Function} return.getSearchParams - 获取深拷贝后的搜索参数对象
+ * @returns {ComputedRef<TmCompositeSearchBindProps>} return.compositeSearchProps - 可直接 `v-bind` 到 `<tm-composite-search>` 的属性集合
+ * @returns {ComputedRef<TmCompositeSearchTagsBindProps>} return.compositeSearchTagsProps - 可直接 `v-bind` 到 `<tm-composite-search-tags>` 的属性集合
  *
  * @example
  * const {
- *   searchPayloads,
- *   addSearchPayload,
- *   removeSearchPayload,
- *   clearSearchPayloads,
+ *   compositeSearchProps,
+ *   compositeSearchTagsProps,
  *   getSearchParams
  * } = useCompositeSearch({
+ *   searchFields,
  *   onSearchChange: (params) => {
  *     console.log('搜索参数变化:', params);
  *     // 执行搜索逻辑
  *   }
  * })
+ * // 模板中直接一行绑定
+ * // <tm-composite-search v-bind="compositeSearchProps"></tm-composite-search>
+ * // <tm-composite-search-tags v-bind="compositeSearchTagsProps"></tm-composite-search-tags>
  */
-export const useCompositeSearch = (options?: UseCompositeSearchOptions) => {
-  const { onSearchChange } = options || {}
+export const useCompositeSearch = (options: UseCompositeSearchOptions) => {
+  const { onSearchChange, searchFields } = options
 
   /**
    * 存储搜索负载的响应式数组
@@ -120,11 +145,38 @@ export const useCompositeSearch = (options?: UseCompositeSearchOptions) => {
     return searchParams
   }
 
+  /**
+   * 可直接通过 `v-bind` 绑定到 `<tm-composite-search>` 的属性集合
+   * 将 searchFields、value、onSearch、onReset 打包为一个对象，免去手动逐个绑定的繁琐
+   * @type {ComputedRef<TmCompositeSearchBindProps>}
+   */
+  const compositeSearchProps = computed<TmCompositeSearchBindProps>(() => ({
+    searchFields: unref(searchFields),
+    value: computedSearchPayloads.value,
+    onSearch: addSearchPayload,
+    onReset: removeSearchPayload,
+  }))
+
+  /**
+   * 可直接通过 `v-bind` 绑定到 `<tm-composite-search-tags>` 的属性集合
+   * 将 value、onClose、onClear 打包为一个对象，免去手动逐个绑定的繁琐
+   * @type {ComputedRef<TmCompositeSearchTagsBindProps>}
+   */
+  const compositeSearchTagsProps = computed<TmCompositeSearchTagsBindProps>(
+    () => ({
+      value: computedSearchPayloads.value,
+      onClose: removeSearchPayload,
+      onClear: clearSearchPayloads,
+    }),
+  )
+
   return {
     searchPayloads: computedSearchPayloads,
     addSearchPayload,
     removeSearchPayload,
     clearSearchPayloads,
     getSearchParams,
+    compositeSearchProps,
+    compositeSearchTagsProps,
   }
 }

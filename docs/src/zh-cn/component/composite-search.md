@@ -16,6 +16,35 @@ title: CompositeSearch
 `useCompositeSearch` 中已经封装了各种操作搜索的逻辑，使用起来更加方便。同时，CompositeSearch 通常也会搭配其他组件（例如[CompositeSearchTags](/zh-cn/component/composite-search.html#配合compositesearchtags使用)）进行使用，该hook将参数统一暴露到上层管理，将相关的方法直接传给组件即可，这样用户可以只用关心组合搜索相关组件的布局即可。
 :::
 
+### 简化绑定
+
+`useCompositeSearch` 返回的 `compositeSearchProps` 和 `compositeSearchTagsProps` 已分别将两个组件所需的参数打包，通过 `v-bind` 一行即可完成绑定，无需手动逐个传参。
+
+**传统写法**
+
+```vue
+<tm-composite-search
+  :search-fields="searchFields"
+  :value="searchPayloads"
+  @search="addSearchPayload"
+  @reset="removeSearchPayload"
+/>
+<tm-composite-search-tags
+  :value="searchPayloads"
+  @close="removeSearchPayload"
+  @clear="clearSearchPayloads"
+/>
+```
+
+**使用 `compositeSearchProps` / `compositeSearchTagsProps` 后**
+
+```vue
+<tm-composite-search v-bind="compositeSearchProps" />
+<tm-composite-search-tags v-bind="compositeSearchTagsProps" />
+```
+
+如果默认的清空逻辑不满足需求，可以在 `v-bind` 之后覆盖对应属性，例如 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"`。
+
 :::demo
 composite-search/basic
 :::
@@ -37,6 +66,29 @@ composite-search/single-multiple
 :::demo
 composite-search/search-tags
 :::
+
+## useCompositeSearch API
+
+组合搜索的状态管理 Hook，用于维护搜索条件的状态并提供增删改查能力。
+
+### 参数 (options)
+
+| 参数           | 类型                                                                                                             | 默认值 | 说明                                                                              |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------- |
+| onSearchChange | `(params: Record<string, TmCompositeSearchPayloadValue>) => void`                                                | -      | 搜索条件变化时的回调，参数为深拷贝后的 `{ field: value }` 对象                    |
+| searchFields   | `TmCompositeSearchFieldItem[] \| Ref<TmCompositeSearchFieldItem[]> \| ComputedRef<TmCompositeSearchFieldItem[]>` | -      | 搜索字段配置（必填），可传数组或响应式引用，用于组装返回的 `compositeSearchProps` |
+
+### 返回值
+
+| 参数                     | 类型                                                  | 说明                                                                         |
+| ------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| searchPayloads           | `ComputedRef<TmCompositeSearchPayload[]>`             | 当前所有搜索负载                                                             |
+| addSearchPayload         | `(payload: TmCompositeSearchPayload) => void`         | 添加或更新搜索负载（按 `field` 去重，存在则更新）                            |
+| removeSearchPayload      | `(payload: TmCompositeSearchPayload) => void`         | 移除指定 `field` 的搜索负载                                                  |
+| clearSearchPayloads      | `() => void`                                          | 清空所有搜索负载                                                             |
+| getSearchParams          | `() => Record<string, TmCompositeSearchPayloadValue>` | 获取深拷贝后的 `{ field: value }` 搜索参数对象                               |
+| compositeSearchProps     | `ComputedRef<Required<TmCompositeSearchProps>>`       | 可直接 `v-bind` 到 `<tm-composite-search>` 的属性集合，所有属性均为必填      |
+| compositeSearchTagsProps | `ComputedRef<Required<TmCompositeSearchTagsProps>>`   | 可直接 `v-bind` 到 `<tm-composite-search-tags>` 的属性集合，所有属性均为必填 |
 
 ## CompositeSearch API
 

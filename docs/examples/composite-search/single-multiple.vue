@@ -2,12 +2,7 @@
   <div class="example-single-multiple">
     <t-space direction="vertical">
       <div>search params: {{ getSearchParams() }}</div>
-      <tm-composite-search
-        :search-fields="searchFields"
-        :value="searchPayloads"
-        @search="addSearchPayload"
-        @reset="removeSearchPayload"
-      ></tm-composite-search>
+      <tm-composite-search v-bind="compositeSearchProps"></tm-composite-search>
     </t-space>
   </div>
 </template>
@@ -15,17 +10,6 @@
 <script setup lang="ts">
 import type { TmCompositeSearchFieldItem } from 'tdesign-vue-next-more'
 import { useCompositeSearch } from 'tdesign-vue-next-more'
-
-const {
-  searchPayloads,
-  addSearchPayload,
-  removeSearchPayload,
-  getSearchParams,
-} = useCompositeSearch({
-  onSearchChange: (searchParams) => {
-    console.log('searchParams: ', searchParams)
-  },
-})
 
 const searchFields: TmCompositeSearchFieldItem[] = [
   {
@@ -55,4 +39,11 @@ const searchFields: TmCompositeSearchFieldItem[] = [
     ],
   },
 ]
+
+const { compositeSearchProps, getSearchParams } = useCompositeSearch({
+  searchFields,
+  onSearchChange: (searchParams) => {
+    console.log('searchParams: ', searchParams)
+  },
+})
 </script>
