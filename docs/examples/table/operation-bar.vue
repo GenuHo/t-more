@@ -125,9 +125,10 @@ const handleDownloadClick = () => {
 const topRightButtons: TmTableProps['topRightButtons'] = [
   {
     type: 'download',
-    render() {
+    onClick: handleDownloadClick,
+    render(_h, config) {
       return (
-        <t-button shape="square" variant="text" onClick={handleDownloadClick}>
+        <t-button shape="square" variant="text" onClick={config.onClick}>
           <DownloadIcon />
         </t-button>
       )

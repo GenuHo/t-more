@@ -1,8 +1,8 @@
-import type { RenderFunction } from 'vue'
 import type {
   EnhancedTableProps,
   TableRowData,
   PrimaryTableCol,
+  TNode,
 } from 'tdesign-vue-next'
 import type {
   TmButtonDropdownProps,
@@ -40,7 +40,7 @@ export type TmTableTopRightButtonItem = {
    * 自定义渲染函数
    * 用于自定义按钮的渲染内容
    */
-  render?: RenderFunction
+  render?: TNode<TmTableTopRightButtonItem>
 
   /**
    * 按钮点击事件回调

@@ -2,6 +2,7 @@ import type { PropType, ComputedRef } from 'vue'
 import {
   computed,
   defineComponent,
+  h,
   nextTick,
   onMounted,
   ref,
@@ -181,7 +182,7 @@ export default defineComponent({
             </TButton>
           )
         } else if (button.render) {
-          return button.render?.()
+          return button.render?.(h, button)
         }
       })
     }
