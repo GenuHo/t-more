@@ -52,6 +52,7 @@ export const useOperationColumn = <
                   e,
                 )
               },
+              children: item.children ? dfsWrapper(item.children) : undefined,
             })
           })
           return result

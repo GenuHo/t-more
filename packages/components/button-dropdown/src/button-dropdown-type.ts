@@ -57,7 +57,9 @@ export interface TmButtonDropdownProps {
 export type TmButtonDropdownItemWithCustomOnClick<T> = {
   [K in keyof TmButtonDropdownItem]: K extends 'onClick'
     ? T // 将 onClick 类型替换为自定义类型 T
-    : TmButtonDropdownItem[K] // 其他属性保持原类型
+    : K extends 'children'
+      ? TmButtonDropdownItemWithCustomOnClick<T>[] | undefined // 子菜单项递归应用自定义 onClick 类型
+      : TmButtonDropdownItem[K] // 其他属性保持原类型
 }
 
 /**

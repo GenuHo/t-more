@@ -52,6 +52,27 @@ const { operationColumn } = useOperationColumn({
           )
         },
       },
+      {
+        content: 'More',
+        children: [
+          {
+            content: 'View detail',
+            onClick(data) {
+              MessagePlugin.info(
+                `View row: ${data.row.name.first} ${data.row.name.last}`,
+              )
+            },
+          },
+          {
+            content: 'Disable',
+            onClick(data) {
+              MessagePlugin.warning(
+                `Disable row: ${data.row.name.first} ${data.row.name.last}`,
+              )
+            },
+          },
+        ],
+      },
     ],
   },
 })
