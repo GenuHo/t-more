@@ -97,8 +97,11 @@ export default defineComponent({
     const currentSearchParams = computed(() => {
       return getSearchParams()
     })
-    const selfCurrent = ref(props?.pagination?.current ?? 1)
-    const selfPageSize = ref(props?.pagination?.pageSize ?? 10)
+    // 请求模式下的初始分页配置，供「重置」与「清空搜索」恢复使用
+    const defaultCurrent = props?.pagination?.current ?? 1
+    const defaultPageSize = props?.pagination?.pageSize ?? 10
+    const selfCurrent = ref(defaultCurrent)
+    const selfPageSize = ref(defaultPageSize)
     const total = ref(0)
     const loading = ref(false)
     const search = async () => {
@@ -124,8 +127,15 @@ export default defineComponent({
     onMounted(() => {
       search()
     })
+    // 重置按钮：分页与搜索条件全部恢复到初始状态
     const reset = () => {
-      selfCurrent.value = 1
+      selfCurrent.value = defaultCurrent
+      selfPageSize.value = defaultPageSize
+      clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
+    }
+    // 清空全部搜索条件：回到初始页，但保留用户选择的分页大小
+    const handleClearSearch = () => {
+      selfCurrent.value = defaultCurrent
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
     const onPaginationChange = (pageInfo: PageInfo) => {
@@ -277,7 +287,7 @@ export default defineComponent({
               ref={tmCompositeSearchTagsRef}
               value={searchPayloads.value}
               onClose={removeSearchPayload}
-              onClear={clearSearchPayloads}
+              onClear={handleClearSearch}
             ></TmCompositeSearchTags>
           </div>
           <EnhancedTable
