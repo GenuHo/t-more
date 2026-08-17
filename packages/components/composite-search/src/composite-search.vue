@@ -136,14 +136,17 @@ const handlePopupVisibleChange = (visible: boolean) => {
 const inputValue = ref('')
 const handleClickSearch = () => {
   if (!currentFieldItem.value) return
-  if (currentFieldItem.value.type === 'input' && inputValue.value) {
-    props?.onSearch?.({
-      field: currentFieldItem.value.field,
-      name: currentFieldItem.value.name,
-      value: inputValue.value.trim(),
-      label: inputValue.value.trim(),
-    })
-    inputValue.value = ''
+  if (currentFieldItem.value.type === 'input') {
+    const trimmedValue = inputValue.value.trim()
+    if (trimmedValue) {
+      props?.onSearch?.({
+        field: currentFieldItem.value.field,
+        name: currentFieldItem.value.name,
+        value: trimmedValue,
+        label: trimmedValue,
+      })
+      inputValue.value = ''
+    }
     return
   } else if (currentFieldItem.value.type === 'single') {
     handleConfirm()
