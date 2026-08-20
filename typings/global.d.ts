@@ -1,10 +1,10 @@
 declare module 'vue' {
   export interface GlobalComponents {
-    TmButtonDropdown: (typeof import('tdesign-vue-next-more'))['TmButtonDropdown']
-    TmCollapseTransition: (typeof import('tdesign-vue-next-more'))['TmCollapseTransition']
-    TmCompositeSearch: (typeof import('tdesign-vue-next-more'))['TmCompositeSearch']
-    TmCompositeSearchTags: (typeof import('tdesign-vue-next-more'))['TmCompositeSearchTags']
-    TmTable: (typeof import('tdesign-vue-next-more'))['TmTable']
+    TmButtonDropdown: (typeof import('@tailor-more/t-more'))['TmButtonDropdown']
+    TmCollapseTransition: (typeof import('@tailor-more/t-more'))['TmCollapseTransition']
+    TmCompositeSearch: (typeof import('@tailor-more/t-more'))['TmCompositeSearch']
+    TmCompositeSearchTags: (typeof import('@tailor-more/t-more'))['TmCompositeSearchTags']
+    TmTable: (typeof import('@tailor-more/t-more'))['TmTable']
   }
 }
 

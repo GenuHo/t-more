@@ -7,8 +7,8 @@ import type {
 import type {
   TmButtonDropdownProps,
   TmCompositeSearchFieldItem,
-} from '@tdesign-vue-next-more/components'
-import type { PartialByKeys } from '@tdesign-vue-next-more/utils'
+} from '@tailor-more/t-more-components'
+import type { PartialByKeys } from '@tailor-more/t-more-utils'
 
 /**
  * 表格列配置类型

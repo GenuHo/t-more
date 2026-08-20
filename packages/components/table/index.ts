@@ -1,5 +1,5 @@
-import { withInstall } from '@tdesign-vue-next-more/utils'
-import type { SFCWithInstall } from '@tdesign-vue-next-more/utils'
+import { withInstall } from '@tailor-more/t-more-utils'
+import type { SFCWithInstall } from '@tailor-more/t-more-utils'
 import _TmTable from './src/table.tsx'
 
 export const TmTable: SFCWithInstall<typeof _TmTable> = withInstall(_TmTable)

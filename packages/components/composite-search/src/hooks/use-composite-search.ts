@@ -8,7 +8,7 @@ import type {
 } from '../composite-search-type'
 import type { MaybeRef } from 'vue'
 import { computed, ref, unref } from 'vue'
-import type { TmCompositeSearchTagsProps } from '@tdesign-vue-next-more/components'
+import type { TmCompositeSearchTagsProps } from '@tailor-more/t-more-components'
 
 /**
  * 组合搜索组件的绑定属性（由 compositeSearchProps 返回）

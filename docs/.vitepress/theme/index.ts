@@ -4,7 +4,7 @@ import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import './style.css'
 import VpDemo from '../vitepress/components/vp-demo.vue'
-import TMore from 'tdesign-vue-next-more'
+import TMore from '@tailor-more/t-more'
 
 export default {
   extends: DefaultTheme,

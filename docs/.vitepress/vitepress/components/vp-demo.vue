@@ -35,7 +35,7 @@ import { useLang } from '../hooks/use-lang'
 import vpDemoLocale from '../../locale/vp-components/vp-demo.json'
 import { useClipboard } from '@vueuse/core'
 import { MessagePlugin } from 'tdesign-vue-next'
-import { TmCollapseTransition } from '@tdesign-vue-next-more/components'
+import { TmCollapseTransition } from '@tailor-more/t-more-components'
 
 const lang = useLang()
 const locale = computed(

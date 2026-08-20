@@ -1,4 +1,4 @@
-import type { TmCompositeSearchPayload } from '@tdesign-vue-next-more/components'
+import type { TmCompositeSearchPayload } from '@tailor-more/t-more-components'
 
 export interface TmCompositeSearchTagsProps {
   /**

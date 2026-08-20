@@ -11,7 +11,7 @@
 import type {
   TmButtonDropdownItem,
   TmButtonDropdownProps,
-} from 'tdesign-vue-next-more'
+} from '@tailor-more/t-more'
 
 const buttons1: TmButtonDropdownItem[] = [
   {

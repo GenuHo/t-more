@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TmButtonDropdownItem } from 'tdesign-vue-next-more'
+import type { TmButtonDropdownItem } from '@tailor-more/t-more'
 
 const buttons1: TmButtonDropdownItem[] = [
   {

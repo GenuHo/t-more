@@ -5,10 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  useCollapseAnimation,
-  useNamespace,
-} from '@tdesign-vue-next-more/hooks'
+import { useCollapseAnimation, useNamespace } from '@tailor-more/t-more-hooks'
 
 defineOptions({
   name: 'TmCollapseTransition',
@@ -20,5 +17,5 @@ const on = useCollapseAnimation()
 </script>
 
 <style lang="less">
-@import url('@tdesign-vue-next-more/theme-chalk/collapse-transition.less');
+@import url('@tailor-more/t-more-theme-chalk/collapse-transition.less');
 </style>

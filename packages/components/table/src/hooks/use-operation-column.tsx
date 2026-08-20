@@ -4,15 +4,15 @@ import type {
   PrimaryTableCol,
   TableRowData,
 } from 'tdesign-vue-next'
-import { useLocale, useNamespace } from '@tdesign-vue-next-more/hooks'
+import { useLocale, useNamespace } from '@tailor-more/t-more-hooks'
 import type {
   TmButtonDropdownItem,
   TmButtonDropdownItemWithCustomOnClick,
   TmButtonDropdownProps,
   TmButtonDropdownPropsWithCustomOnClick,
   TmTableCol,
-} from '@tdesign-vue-next-more/components'
-import { TmButtonDropdown } from '@tdesign-vue-next-more/components'
+} from '@tailor-more/t-more-components'
+import { TmButtonDropdown } from '@tailor-more/t-more-components'
 
 export const TM_OPERATION_COL_KEY = 'TM_OPERATION_COL_KEY'
 

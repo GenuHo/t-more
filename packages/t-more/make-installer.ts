@@ -1,5 +1,5 @@
 import type { App, Plugin } from 'vue'
-import { INSTALLED_KEY } from '@tdesign-vue-next-more/constants'
+import { INSTALLED_KEY } from '@tailor-more/t-more-constants'
 
 export const makeInstaller = (components: Plugin[] = []) => {
   const install = (app: App) => {

@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useNamespace, useLocale } from '@tdesign-vue-next-more/hooks'
-import type { TmCompositeSearchPayload } from '@tdesign-vue-next-more/components'
+import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
+import type { TmCompositeSearchPayload } from '@tailor-more/t-more-components'
 import type { TmCompositeSearchTagsProps } from './composite-search-tags-type'
 
 defineOptions({
@@ -57,5 +57,5 @@ const handleClear = () => {
 </script>
 
 <style lang="less">
-@import url('@tdesign-vue-next-more/theme-chalk/composite-search-tags.less');
+@import url('@tailor-more/t-more-theme-chalk/composite-search-tags.less');
 </style>

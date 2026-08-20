@@ -61,7 +61,7 @@
 <script lang="tsx" setup>
 import { isNil } from 'lodash-unified'
 import { computed, ref, useTemplateRef, watch } from 'vue'
-import { useNamespace, useLocale } from '@tdesign-vue-next-more/hooks'
+import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
 import type {
   TmCompositeSearchProps,
   TmCompositeSearchFieldItem,
@@ -294,5 +294,5 @@ const getPopupContent = () => {
 </script>
 
 <style lang="less">
-@import url('@tdesign-vue-next-more/theme-chalk/composite-search.less');
+@import url('@tailor-more/t-more-theme-chalk/composite-search.less');
 </style>

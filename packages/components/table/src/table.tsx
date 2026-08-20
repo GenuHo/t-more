@@ -17,7 +17,7 @@ import { defaultTableTopRightButtons } from './table-default'
 import type {
   TmCompositeSearchFieldItem,
   TmCompositeSearchTagsInstance,
-} from '@tdesign-vue-next-more/components'
+} from '@tailor-more/t-more-components'
 import {
   TmCompositeSearchTags,
   TmCompositeSearch,
@@ -25,10 +25,10 @@ import {
   TM_OPERATION_COL_KEY,
   useColumnCalcWidth,
   useCompositeSearch,
-} from '@tdesign-vue-next-more/components'
-import { SCREEN_WIDTH } from '@tdesign-vue-next-more/constants'
-import { useNamespace } from '@tdesign-vue-next-more/hooks'
-import { deleteObjectKeys } from '@tdesign-vue-next-more/utils'
+} from '@tailor-more/t-more-components'
+import { SCREEN_WIDTH } from '@tailor-more/t-more-constants'
+import { useNamespace } from '@tailor-more/t-more-hooks'
+import { deleteObjectKeys } from '@tailor-more/t-more-utils'
 
 import type { PageInfo, PrimaryTableCol, TableRowData } from 'tdesign-vue-next'
 import { EnhancedTable } from 'tdesign-vue-next'
@@ -39,7 +39,7 @@ import enhancedTableProps from 'tdesign-vue-next/es/table/enhanced-table-props'
 import { useElementSize, useWindowSize } from '@vueuse/core'
 import { isNumber } from 'lodash-unified'
 
-import '@tdesign-vue-next-more/theme-chalk/table.less'
+import '@tailor-more/t-more-theme-chalk/table.less'
 
 export default defineComponent({
   name: 'TmTable',

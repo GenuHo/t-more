@@ -5,11 +5,11 @@ import {
   type TmButtonDropdownProps,
 } from './button-dropdown-type'
 import { TM_BUTTON_DROPDOWN_ITEM_OWN_KEYS } from './constants'
-import { useNamespace, useLocale } from '@tdesign-vue-next-more/hooks'
+import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
 import type { DropdownOption, TNode } from 'tdesign-vue-next'
 
-import '@tdesign-vue-next-more/theme-chalk/button-dropdown.less'
-import { deleteObjectKeys, getFirstDefined } from '@tdesign-vue-next-more/utils'
+import '@tailor-more/t-more-theme-chalk/button-dropdown.less'
+import { deleteObjectKeys, getFirstDefined } from '@tailor-more/t-more-utils'
 import { isFunction, isUndefined } from 'lodash-unified'
 
 const ns = useNamespace('button-dropdown')

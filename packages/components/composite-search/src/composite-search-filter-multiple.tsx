@@ -1,6 +1,6 @@
-import '@tdesign-vue-next-more/theme-chalk/composite-search-filter-multiple.less'
+import '@tailor-more/t-more-theme-chalk/composite-search-filter-multiple.less'
 
-import { useNamespace } from '@tdesign-vue-next-more/hooks'
+import { useNamespace } from '@tailor-more/t-more-hooks'
 import { defineComponent } from 'vue'
 import type { TmCompositeSearchFilterMultipleProps } from './composite-search-filter-multiple-type'
 

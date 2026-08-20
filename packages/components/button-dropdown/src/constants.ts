@@ -1,4 +1,4 @@
-import type { OwnKeysStrictUnionTuple } from '@tdesign-vue-next-more/utils'
+import type { OwnKeysStrictUnionTuple } from '@tailor-more/t-more-utils'
 import type { TmButtonDropdownItem } from './button-dropdown-type'
 import type { ButtonProps } from 'tdesign-vue-next'
 

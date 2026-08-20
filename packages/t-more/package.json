@@ -1,0 +1,15 @@
+{
+  "name": "@tailor-more/t-more",
+  "version": "0.0.0",
+  "description": "A tailored Vue 3 component library based on tdesign-vue-next",
+  "scripts": {},
+  "keywords": [
+    "tdesign",
+    "tdesign-vue-next",
+    "vue",
+    "vue3",
+    "components",
+    "ui",
+    "component-library"
+  ]
+}

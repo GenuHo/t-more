@@ -15,7 +15,7 @@ import {
   TmTable,
   type TmTableCol,
   useOperationColumn,
-} from '@tdesign-vue-next-more/components'
+} from '@tailor-more/t-more-components'
 import type { PrimaryTableCellParams } from 'tdesign-vue-next'
 const buttonDropdownPropObj = {
   buttons: [

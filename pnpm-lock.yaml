@@ -180,7 +180,7 @@ importers:
 
   packages/locale: {}
 
-  packages/tdesign-vue-next-more: {}
+  packages/t-more: {}
 
   packages/theme-chalk: {}
 

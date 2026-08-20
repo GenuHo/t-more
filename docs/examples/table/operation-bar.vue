@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="tsx">
-import type { TmTableProps, TmTableCol } from 'tdesign-vue-next-more'
+import type { TmTableProps, TmTableCol } from '@tailor-more/t-more'
 
 const statusNameListMap = {
   0: {

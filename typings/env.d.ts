@@ -3,7 +3,7 @@
 // 使用docs都有用到的类型，因为docs里面都会有packages中的组件的文档
 /// <reference types="../docs/components" />
 
-import type { INSTALLED_KEY } from '@tdesign-vue-next-more/constants'
+import type { INSTALLED_KEY } from '@tailor-more/t-more-constants'
 
 declare module 'vue' {
   export interface App {

@@ -1,9 +1,8 @@
 {
-  "private": true,
   "packageManager": "pnpm@9.5.0",
-  "name": "tdesign-vue-next-more",
+  "name": "@tailor-more/t-more",
   "version": "0.0.0",
-  "description": "",
+  "description": "A tailored Vue 3 component library based on tdesign-vue-next",
   "scripts": {
     "dev": "pnpm -C admin-app dev",
     "build": "pnpm -C admin-app build",

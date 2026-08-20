@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import type { TmCompositeSearchFieldItem } from 'tdesign-vue-next-more'
-import { useCompositeSearch } from 'tdesign-vue-next-more'
+import type { TmCompositeSearchFieldItem } from '@tailor-more/t-more'
+import { useCompositeSearch } from '@tailor-more/t-more'
 
 const searchFields: TmCompositeSearchFieldItem[] = [
   {

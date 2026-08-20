@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="tsx">
-import type { TmTableCol } from 'tdesign-vue-next-more'
-import { useOperationColumn } from 'tdesign-vue-next-more'
+import type { TmTableCol } from '@tailor-more/t-more'
+import { useOperationColumn } from '@tailor-more/t-more'
 
 const statusNameListMap = {
   0: {

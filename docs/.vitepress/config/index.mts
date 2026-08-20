@@ -31,9 +31,9 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        'tdesign-vue-next-more': path.resolve(
+        '@tailor-more/t-more': path.resolve(
           docRoot,
-          '../packages/tdesign-vue-next-more',
+          '../packages/t-more',
         ),
       },
     },
