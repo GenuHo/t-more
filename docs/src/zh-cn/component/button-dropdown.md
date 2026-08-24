@@ -28,7 +28,7 @@ button-dropdown/fold
 
 可以直接通过按钮的 `disabled` 属性进行禁用，也可以通过 `tooltipProps` 属性配置按钮的提示信息。
 
-如果按钮变为下拉菜单，`dropdownItemProps` 的 `disabled` 也会禁用按钮。`TmButtonDropdownProps` 中的 `disabled` 属性优先级会更高
+如果按钮变为下拉菜单，`dropdownItemProps` 的 `disabled` 也会禁用按钮。按钮项 `TmButtonDropdownItem` 上的 `disabled` 属性优先级会更高
 
 :::demo
 button-dropdown/disabled-tooltip
@@ -55,7 +55,7 @@ button-dropdown/children
 
 | 参数              | 类型                                                                                                                      | 默认值 | 说明                                                                           |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------ |
-| children          | TmButtonDropdownItem[]                                                                                                    | []     | 子菜单项，用于创建下拉菜单                                                     |
+| children          | TmButtonDropdownItem[]                                                                                                    | -      | 子菜单项，用于创建下拉菜单                                                     |
 | dropdownProps     | Omit<[DropdownProps](https://tdesign.tencent.com/vue-next/components/dropdown?tab=api#dropdown-props), 'onClick'>         | -      | 下拉菜单属性配置，当按钮作为下拉菜单触发器时，此属性将传递给 Dropdown 组件     |
 | dropdownItemProps | Omit<[DropdownItemProps](https://tdesign.tencent.com/vue-next/components/dropdown?tab=api#dropdownitem-props), 'onClick'> | -      | 下拉菜单项属性配置，当按钮作为下拉菜单选项时，此属性将传递给 DropdownItem 组件 |
 | tooltipProps      | [TooltipProps](https://tdesign.tencent.com/vue-next/components/tooltip?tab=api)                                           | -      | 悬浮提示属性配置                                                               |

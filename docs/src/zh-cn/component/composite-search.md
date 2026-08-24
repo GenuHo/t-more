@@ -23,24 +23,28 @@ title: CompositeSearch
 **传统写法**
 
 ```vue
-<tm-composite-search
-  :search-fields="searchFields"
-  :value="searchPayloads"
-  @search="addSearchPayload"
-  @reset="removeSearchPayload"
-/>
-<tm-composite-search-tags
-  :value="searchPayloads"
-  @close="removeSearchPayload"
-  @clear="clearSearchPayloads"
-/>
+<template>
+  <tm-composite-search
+    :search-fields="searchFields"
+    :value="searchPayloads"
+    @search="addSearchPayload"
+    @reset="removeSearchPayload"
+  />
+  <tm-composite-search-tags
+    :value="searchPayloads"
+    @close="removeSearchPayload"
+    @clear="clearSearchPayloads"
+  />
+</template>
 ```
 
 **使用 `compositeSearchProps` / `compositeSearchTagsProps` 后**
 
 ```vue
-<tm-composite-search v-bind="compositeSearchProps" />
-<tm-composite-search-tags v-bind="compositeSearchTagsProps" />
+<template>
+  <tm-composite-search v-bind="compositeSearchProps" />
+  <tm-composite-search-tags v-bind="compositeSearchTagsProps" />
+</template>
 ```
 
 如果默认的清空逻辑不满足需求，可以在 `v-bind` 之后覆盖对应属性，例如 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"`。
@@ -96,7 +100,7 @@ composite-search/search-tags
 
 | 参数         | 类型                                        | 默认值 | 说明                 |
 | ------------ | ------------------------------------------- | ------ | -------------------- |
-| searchFields | TmCompositeSearchFieldItem[]                | -      | 搜索字段配置项数组   |
+| searchFields | TmCompositeSearchFieldItem[]                | []     | 搜索字段配置项数组   |
 | value        | TmCompositeSearchPayload[]                  | -      | 搜索结果数据模型     |
 | onSearch     | (payload: TmCompositeSearchPayload) => void | -      | 搜索事件回调函数     |
 | onReset      | (payload: TmCompositeSearchPayload) => void | -      | 重置搜索事件回调函数 |
@@ -107,32 +111,32 @@ composite-search/search-tags
 
 **TmCompositeSearchInputFieldItem (输入框类型)**
 
-| 参数        | 类型    | 默认值 | 说明                     |
-| ----------- | ------- | ------ | ------------------------ |
-| type        | 'input' | -      | 字段类型，固定值 'input' |
-| name        | string  | -      | 字段显示名称             |
-| field       | string  | -      | 对应数据字段名           |
-| placeholder | string  | -      | 占位符文本               |
+| 参数        | 类型    | 默认值 | 是否必填 | 说明                     |
+| ----------- | ------- | ------ | -------- | ------------------------ |
+| type        | 'input' | -      | 是       | 字段类型，固定值 'input' |
+| name        | string  | -      | 是       | 字段显示名称             |
+| field       | string  | -      | 是       | 对应数据字段名           |
+| placeholder | string  | -      | 否       | 占位符文本               |
 
 **TmCompositeSearchSingleFieldItem (单选类型)**
 
-| 参数        | 类型         | 默认值 | 说明                      |
-| ----------- | ------------ | ------ | ------------------------- |
-| type        | 'single'     | -      | 字段类型，固定值 'single' |
-| name        | string       | -      | 字段显示名称              |
-| field       | string       | -      | 对应数据字段名            |
-| placeholder | string       | -      | 占位符文本                |
-| list        | OptionData[] | -      | 选项数据数组              |
+| 参数        | 类型         | 默认值 | 是否必填 | 说明                      |
+| ----------- | ------------ | ------ | -------- | ------------------------- |
+| type        | 'single'     | -      | 是       | 字段类型，固定值 'single' |
+| name        | string       | -      | 是       | 字段显示名称              |
+| field       | string       | -      | 是       | 对应数据字段名            |
+| placeholder | string       | -      | 否       | 占位符文本                |
+| list        | OptionData[] | -      | 是       | 选项数据数组              |
 
 **TmCompositeSearchMultipleFieldItem (多选类型)**
 
-| 参数        | 类型         | 默认值 | 说明                        |
-| ----------- | ------------ | ------ | --------------------------- |
-| type        | 'multiple'   | -      | 字段类型，固定值 'multiple' |
-| name        | string       | -      | 字段显示名称                |
-| field       | string       | -      | 对应数据字段名              |
-| placeholder | string       | -      | 占位符文本                  |
-| list        | OptionData[] | -      | 选项数据数组                |
+| 参数        | 类型         | 默认值 | 是否必填 | 说明                        |
+| ----------- | ------------ | ------ | -------- | --------------------------- |
+| type        | 'multiple'   | -      | 是       | 字段类型，固定值 'multiple' |
+| name        | string       | -      | 是       | 字段显示名称                |
+| field       | string       | -      | 是       | 对应数据字段名              |
+| placeholder | string       | -      | 否       | 占位符文本                  |
+| list        | OptionData[] | -      | 是       | 选项数据数组                |
 
 ### 事件
 
