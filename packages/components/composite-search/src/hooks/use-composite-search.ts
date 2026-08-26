@@ -45,6 +45,7 @@ interface UseCompositeSearchOptions {
  * @returns {Function} return.addSearchPayload - 添加或更新搜索负载
  * @returns {Function} return.removeSearchPayload - 移除指定搜索负载
  * @returns {Function} return.clearSearchPayloads - 清空所有搜索负载
+ * @returns {Function} return.setSearchPayloads - 整体替换所有搜索负载
  * @returns {Function} return.getSearchParams - 获取深拷贝后的搜索参数对象
  * @returns {ComputedRef<TmCompositeSearchBindProps>} return.compositeSearchProps - 可直接 `v-bind` 到 `<tm-composite-search>` 的属性集合
  * @returns {ComputedRef<TmCompositeSearchTagsBindProps>} return.compositeSearchTagsProps - 可直接 `v-bind` 到 `<tm-composite-search-tags>` 的属性集合
@@ -133,6 +134,13 @@ export const useCompositeSearch = (options: UseCompositeSearchOptions) => {
   }
 
   /**
+   * 整体替换所有搜索负载
+   */
+  const setSearchPayloads = (newPayloads: TmCompositeSearchPayload[]) => {
+    updateSearchPayloads(newPayloads)
+  }
+
+  /**
    * 获取当前所有搜索负载的深拷贝对象
    * 返回以 field 为键、value 为值的普通对象
    * @returns {Record<string, TmCompositeSearchPayloadValue>} 以搜索字段名为键的搜索参数对象
@@ -159,12 +167,13 @@ export const useCompositeSearch = (options: UseCompositeSearchOptions) => {
 
   /**
    * 可直接通过 `v-bind` 绑定到 `<tm-composite-search-tags>` 的属性集合
-   * 将 value、onClose、onClear 打包为一个对象，免去手动逐个绑定的繁琐
+   * 将 value、searchFields、onClose、onClear 打包为一个对象，免去手动逐个绑定的繁琐
    * @type {ComputedRef<TmCompositeSearchTagsBindProps>}
    */
   const compositeSearchTagsProps = computed<TmCompositeSearchTagsBindProps>(
     () => ({
       value: computedSearchPayloads.value,
+      searchFields: unref(searchFields),
       onClose: removeSearchPayload,
       onClear: clearSearchPayloads,
     }),
@@ -175,6 +184,7 @@ export const useCompositeSearch = (options: UseCompositeSearchOptions) => {
     addSearchPayload,
     removeSearchPayload,
     clearSearchPayloads,
+    setSearchPayloads,
     getSearchParams,
     compositeSearchProps,
     compositeSearchTagsProps,

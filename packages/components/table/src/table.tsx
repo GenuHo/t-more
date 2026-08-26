@@ -10,9 +10,14 @@ import {
   watch,
 } from 'vue'
 
-import type { TmTableProps } from './table-type'
+import type { TmTableCol, TmTableProps } from './table-type'
 import { TM_TABLE_OWN_KEYS } from './constants'
 import { defaultTableTopRightButtons } from './table-default'
+import {
+  deriveColumnFilter,
+  filterValueToPayloads,
+  payloadsToFilterValue,
+} from './utils'
 
 import type {
   TmCompositeSearchFieldItem,
@@ -30,7 +35,13 @@ import { SCREEN_WIDTH } from '@tailor-more/t-more-constants'
 import { useNamespace } from '@tailor-more/t-more-hooks'
 import { deleteObjectKeys } from '@tailor-more/t-more-utils'
 
-import type { PageInfo, PrimaryTableCol, TableRowData } from 'tdesign-vue-next'
+import type {
+  FilterValue,
+  PageInfo,
+  PrimaryTableCol,
+  TableFilterChangeContext,
+  TableRowData,
+} from 'tdesign-vue-next'
 import { EnhancedTable } from 'tdesign-vue-next'
 import baseTableProps from 'tdesign-vue-next/es/table/base-table-props'
 import primaryTableProps from 'tdesign-vue-next/es/table/primary-table-props'
@@ -76,6 +87,7 @@ export default defineComponent({
           result.push({
             ...searchConfig,
             field: searchConfig?.field || column.colKey!,
+            // TODO 未来支持 title 为渲染函数（TNode）或通过列 render 渲染 title 时提取文本，当前仅支持 string
             name: searchConfig?.name || (column.title as string),
           })
         }
@@ -85,6 +97,8 @@ export default defineComponent({
 
     const {
       clearSearchPayloads,
+      searchPayloads,
+      setSearchPayloads,
       getSearchParams,
       compositeSearchProps,
       compositeSearchTagsProps,
@@ -220,12 +234,23 @@ export default defineComponent({
         })
       },
     )
+    // 参与筛选的列（排除操作列），供派生 filter 注入与 filterValue 转换复用
+    const filterableColumns = computed<TmTableCol[]>(() => {
+      return (
+        props.columns?.filter(
+          (column) => column.colKey !== TM_OPERATION_COL_KEY,
+        ) ?? []
+      )
+    })
+
     const computedColumns = computed(() => {
       const cols: PrimaryTableCol[] = []
       props.columns?.forEach((column) => {
         if (column.colKey !== TM_OPERATION_COL_KEY) {
+          const searchConfig = column.searchConfig
           cols.push({
             ...column,
+            filter: searchConfig ? deriveColumnFilter(searchConfig) : undefined,
           })
         }
       })
@@ -234,6 +259,20 @@ export default defineComponent({
       }
       return cols
     })
+
+    const filterValue = computed(() =>
+      payloadsToFilterValue(searchPayloads.value, filterableColumns.value),
+    )
+
+    const handleFilterChange = (
+      filterValue: FilterValue,
+      context: TableFilterChangeContext<TableRowData>,
+    ) => {
+      setSearchPayloads(
+        filterValueToPayloads(filterValue, filterableColumns.value),
+      )
+      props.onFilterChange?.(filterValue, context)
+    }
 
     expose({
       getTableData: search,
@@ -280,13 +319,20 @@ export default defineComponent({
             )}
             <TmCompositeSearchTags
               ref={tmCompositeSearchTagsRef}
-              {...compositeSearchTagsProps.value}
-              onClear={handleClearSearch}
+              {...{
+                // 覆盖原来的onClear
+                ...compositeSearchTagsProps.value,
+                onClear: handleClearSearch,
+              }}
             ></TmCompositeSearchTags>
           </div>
           <EnhancedTable
             v-slots={slots}
-            {...tProps}
+            {...{
+              // 覆盖原来的onFilterChange
+              ...tProps,
+              onFilterChange: handleFilterChange,
+            }}
             {...attrs}
             ref={enhancedTableRef}
             columns={computedColumns.value}
@@ -306,6 +352,7 @@ export default defineComponent({
                     ...props.pagination,
                   }
             }
+            filterValue={filterValue.value}
           />
         </div>
       )

@@ -143,7 +143,6 @@ const handleClickSearch = () => {
         field: currentFieldItem.value.field,
         name: currentFieldItem.value.name,
         value: trimmedValue,
-        label: trimmedValue,
       })
       inputValue.value = ''
     }
@@ -177,14 +176,10 @@ const handleConfirm = () => {
       props?.onReset?.({ field, name })
       return
     }
-    const label = currentFieldItem.value.list?.find(
-      (item) => item.value === value,
-    )?.label
     props?.onSearch?.({
       field,
       name,
       value,
-      label,
     })
   } else if (currentFieldItem.value.type === 'multiple') {
     const value = filterRecord[currentFieldItem.value.field] || []
@@ -193,15 +188,10 @@ const handleConfirm = () => {
       props?.onReset?.({ field, name })
       return
     }
-    const m = new Map(
-      currentFieldItem.value.list.map((item) => [item.value, item.label]),
-    )
-    const label = value.map((item: any) => m.get(item))
     props?.onSearch?.({
       field,
       name,
       value,
-      label,
     })
   }
 }

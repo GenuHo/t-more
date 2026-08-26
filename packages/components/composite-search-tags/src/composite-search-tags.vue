@@ -24,7 +24,11 @@
 
 <script lang="ts" setup>
 import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
-import type { TmCompositeSearchPayload } from '@tailor-more/t-more-components'
+import type {
+  TmCompositeSearchFieldItem,
+  TmCompositeSearchPayload,
+} from '@tailor-more/t-more-components'
+import type { OptionData } from 'tdesign-vue-next'
 import type { TmCompositeSearchTagsProps } from './composite-search-tags-type'
 
 defineOptions({
@@ -37,14 +41,40 @@ const ns = useNamespace('composite-search-tags')
 
 const props = defineProps<TmCompositeSearchTagsProps>()
 
+const getFieldConfig = (
+  field: string,
+): TmCompositeSearchFieldItem | undefined => {
+  return props.searchFields?.find((item) => item.field === field)
+}
+
+const getOptionLabel = (
+  list: OptionData[] | undefined,
+  value: unknown,
+): string => {
+  const item = list?.find((option) => {
+    const optionValue =
+      typeof option === 'object' && option !== null ? option.value : option
+    return optionValue === value
+  })
+  if (item === undefined) return String(value)
+  return typeof item === 'object' ? (item.label ?? String(value)) : String(item)
+}
+
 const getTagText = (tag: TmCompositeSearchPayload) => {
-  let text = tag.name + t('tm.compositeSearchTags.nameLabelSplit')
-  if (typeof tag.label === 'string') {
-    text = `${text}${tag.label}`
-  } else if (Array.isArray(tag.label)) {
-    text = `${text}${tag.label.join(t('tm.compositeSearchTags.labelSplit'))}`
+  const fieldConfig = getFieldConfig(tag.field)
+  const list =
+    fieldConfig?.type === 'single' || fieldConfig?.type === 'multiple'
+      ? fieldConfig.list
+      : undefined
+  let valueText: string
+  if (Array.isArray(tag.value)) {
+    valueText = tag.value
+      .map((item) => getOptionLabel(list, item))
+      .join(t('tm.compositeSearchTags.labelSplit'))
+  } else {
+    valueText = getOptionLabel(list, tag.value)
   }
-  return text
+  return tag.name + t('tm.compositeSearchTags.nameLabelSplit') + valueText
 }
 
 const handleClose = (tag: TmCompositeSearchPayload) => {

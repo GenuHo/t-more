@@ -82,8 +82,6 @@ export interface TmCompositeSearchProps {
 export interface TmCompositeSearchInputPayload {
   /** 搜索值 */
   value: string
-  /** 显示标签 */
-  label: string
   /** 字段 */
   field: string
   /** 字段显示名称 */
@@ -96,8 +94,6 @@ export interface TmCompositeSearchInputPayload {
 export interface TmCompositeSearchSinglePayload {
   /** 选中的值 */
   value?: OptionData['value']
-  /** 显示标签 */
-  label?: string
   /** 字段 */
   field: string
   /** 字段显示名称 */
@@ -110,8 +106,6 @@ export interface TmCompositeSearchSinglePayload {
 export interface TmCompositeSearchMultiplePayload {
   /** 选中的值 */
   value?: OptionData['value'][]
-  /** 显示标签（可为字符串或字符串数组） */
-  label?: string[]
   /** 字段 */
   field: string
   /** 字段显示名称 */

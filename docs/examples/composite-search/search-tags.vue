@@ -4,7 +4,7 @@
       <div>search params: {{ getSearchParams() }}</div>
       <tm-composite-search v-bind="compositeSearchProps"></tm-composite-search>
       <tm-composite-search-tags
-        v-bind="compositeSearchTagsProps"
+        v-bind="{ ...compositeSearchTagsProps, onClear: handleClear }"
       ></tm-composite-search-tags>
     </t-space>
   </div>
@@ -50,4 +50,8 @@ const { compositeSearchProps, compositeSearchTagsProps, getSearchParams } =
       console.log('searchParams: ', searchParams)
     },
   })
+
+const handleClear = () => {
+  console.log('clear')
+}
 </script>

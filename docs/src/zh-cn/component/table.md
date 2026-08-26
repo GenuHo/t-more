@@ -33,6 +33,19 @@ table/operation-bar
 
 搜索条件会通过 `request` 参数传入，已选搜索条件以标签形式展示，支持单独关闭和全部清除。
 
+### 与表头筛选联动
+
+配置了 `searchConfig` 的列，会自动生成表头筛选图标，并与顶部搜索**双向同步**：
+
+- 在表头筛选（`single` / `multiple` 带 `list` 选项、`input` 为文本输入，均需点击「确定」后生效），会同步更新顶部搜索标签与 `request` 参数；
+- 在顶部搜索，也会同步表头筛选图标的高亮状态与弹窗内的已选值。
+
+表头筛选由组件根据 `searchConfig` 自动生成，列配置中不接受 `filter`。`searchConfig.field` 需保证全局唯一。
+
+::: warning 注意
+`TmTable` 内部管理表头筛选状态，`filterValue` / `defaultFilterValue` 不对外暴露；`onFilterChange` 仍会在筛选变化时触发。
+:::
+
 :::demo
 table/search
 :::
@@ -57,7 +70,7 @@ table/operation-column
 
 ### TmTableProps
 
-`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上新增了以下属性：
+`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上移除了 `filterValue` / `defaultFilterValue`（表头筛选状态由组件内部管理），并新增了以下属性：
 
 | 参数                  | 类型                                                    | 默认值                 | 说明                                                                                                                                      |
 | --------------------- | ------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -70,9 +83,9 @@ table/operation-column
 
 扩展自 `tdesign-vue-next` 的 [PrimaryTableCol](https://tdesign.tencent.com/vue-next/components/table?tab=api#primarytablecol)，新增搜索配置项：
 
-| 参数         | 类型                                                           | 默认值 | 说明                                                                                                                 |
-| ------------ | -------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
-| searchConfig | `PartialByKeys<TmCompositeSearchFieldItem, 'field' \| 'name'>` | -      | 搜索配置项。`field` 和 `name` 非必传，默认取列的 `colKey` 和 `title` 值。支持 `input`、`single`、`multiple` 三种类型 |
+| 参数         | 类型                                                           | 默认值 | 说明                                                                                                                                                                                             |
+| ------------ | -------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| searchConfig | `PartialByKeys<TmCompositeSearchFieldItem, 'field' \| 'name'>` | -      | 搜索配置项。`field` 和 `name` 非必传，默认取列的 `colKey` 和 `title` 值。支持 `input`、`single`、`multiple` 三种类型。配置后会为列自动生成表头筛选（列不接受 `filter` 配置），与顶部搜索双向联动 |
 
 ### TmTableTopRightButtonItem
 
