@@ -1,6 +1,6 @@
 <template>
   <div class="example-basic">
-    <tm-table :columns="columns" :request="fetchData"></tm-table>
+    <tm-table :columns="columns" :request="fetchData" row-key="id"></tm-table>
   </div>
 </template>
 

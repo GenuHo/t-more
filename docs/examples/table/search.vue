@@ -3,6 +3,7 @@
     <tm-table
       :columns="columns"
       :request="fetchData"
+      row-key="id"
       :top-left-button-dropdown="topLeftButtonDropdown"
     ></tm-table>
   </div>
