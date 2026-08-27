@@ -90,7 +90,7 @@ const getAttachElement = (triggerNode: any) => {
 const currentFieldItem = ref<TmCompositeSearchFieldItem | null>(null)
 
 watch(
-  props.searchFields,
+  () => props.searchFields,
   () => {
     if (props.searchFields && props.searchFields.length > 0) {
       currentFieldItem.value = props.searchFields[0]
