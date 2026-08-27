@@ -75,14 +75,17 @@ export default defineComponent({
         if (!(button.children && button.children.length > 0)) {
           return (
             <TDropdownItem
-              {...button.dropdownItemProps}
-              onClick={(
-                dropdownItem: DropdownOption,
-                context: {
-                  e: MouseEvent
+              {...{
+                // 覆盖dropdownItemProps中的onClick，防止上层传入的onClick被mergeProps合并成数组
+                ...button.dropdownItemProps,
+                onClick: (
+                  dropdownItem: DropdownOption,
+                  context: {
+                    e: MouseEvent
+                  },
+                ) => {
+                  button?.onClick?.(context.e)
                 },
-              ) => {
-                button?.onClick?.(context.e)
               }}
               disabled={getFirstDefined(
                 button?.disabled,
@@ -97,14 +100,17 @@ export default defineComponent({
         } else {
           return (
             <TDropdownItem
-              {...button.dropdownItemProps}
-              onClick={(
-                dropdownItem: DropdownOption,
-                context: {
-                  e: MouseEvent
+              {...{
+                // 覆盖dropdownItemProps中的onClick，防止上层传入的onClick被mergeProps合并成数组
+                ...button.dropdownItemProps,
+                onClick: (
+                  dropdownItem: DropdownOption,
+                  context: {
+                    e: MouseEvent
+                  },
+                ) => {
+                  button?.onClick?.(context.e)
                 },
-              ) => {
-                button?.onClick?.(context.e)
               }}
               disabled={getFirstDefined(
                 button?.disabled,
