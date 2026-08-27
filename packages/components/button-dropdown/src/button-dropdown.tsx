@@ -12,10 +12,6 @@ import '@tailor-more/t-more-theme-chalk/button-dropdown.less'
 import { deleteObjectKeys, getFirstDefined } from '@tailor-more/t-more-utils'
 import { isFunction, isUndefined } from 'lodash-unified'
 
-const ns = useNamespace('button-dropdown')
-
-const { t } = useLocale()
-
 export default defineComponent({
   name: 'TmButtonDropdown',
   props: {
@@ -36,6 +32,8 @@ export default defineComponent({
   },
 
   setup(props) {
+    const ns = useNamespace('button-dropdown')
+    const { t } = useLocale()
     // 根据 max 处理出来需要渲染 button 的列表
     // max 表示总展示按钮数量（包含"更多"按钮）；max = 0 时不展示任何按钮；max < 0 时展示全部按钮，不折叠
     const buttons = computed(() => {
