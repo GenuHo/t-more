@@ -48,6 +48,6 @@ export const buildLocaleContext = (
 }
 
 export const useLocale = () => {
-  const locale = inject(localeInjectionKey) || Chinese
+  const locale = inject(localeInjectionKey, Chinese)
   return buildLocaleContext(locale)
 }
