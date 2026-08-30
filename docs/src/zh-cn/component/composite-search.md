@@ -109,32 +109,34 @@ composite-search/search-tags
 
 **TmCompositeSearchInputFieldItem (输入框类型)**
 
-| 参数        | 类型    | 默认值 | 是否必填 | 说明                     |
-| ----------- | ------- | ------ | -------- | ------------------------ |
-| type        | 'input' | -      | 是       | 字段类型，固定值 'input' |
-| name        | string  | -      | 是       | 字段显示名称             |
-| field       | string  | -      | 是       | 对应数据字段名           |
-| placeholder | string  | -      | 否       | 占位符文本               |
+| 参数        | 类型                     | 默认值 | 是否必填 | 说明                     |
+| ----------- | ------------------------ | ------ | -------- | ------------------------ |
+| type        | 'input'                  | -      | 是       | 字段类型，固定值 'input' |
+| name        | string \| (() => string) | -      | 是       | 字段显示名称             |
+| field       | string                   | -      | 是       | 对应数据字段名           |
+| placeholder | string                   | -      | 否       | 占位符文本               |
 
 **TmCompositeSearchSingleFieldItem (单选类型)**
 
-| 参数        | 类型         | 默认值 | 是否必填 | 说明                      |
-| ----------- | ------------ | ------ | -------- | ------------------------- |
-| type        | 'single'     | -      | 是       | 字段类型，固定值 'single' |
-| name        | string       | -      | 是       | 字段显示名称              |
-| field       | string       | -      | 是       | 对应数据字段名            |
-| placeholder | string       | -      | 否       | 占位符文本                |
-| list        | OptionData[] | -      | 是       | 选项数据数组              |
+| 参数        | 类型                     | 默认值 | 是否必填 | 说明                      |
+| ----------- | ------------------------ | ------ | -------- | ------------------------- |
+| type        | 'single'                 | -      | 是       | 字段类型，固定值 'single' |
+| name        | string \| (() => string) | -      | 是       | 字段显示名称              |
+| field       | string                   | -      | 是       | 对应数据字段名            |
+| placeholder | string                   | -      | 否       | 占位符文本                |
+| list        | OptionData[]             | -      | 是       | 选项数据数组              |
 
 **TmCompositeSearchMultipleFieldItem (多选类型)**
 
-| 参数        | 类型         | 默认值 | 是否必填 | 说明                        |
-| ----------- | ------------ | ------ | -------- | --------------------------- |
-| type        | 'multiple'   | -      | 是       | 字段类型，固定值 'multiple' |
-| name        | string       | -      | 是       | 字段显示名称                |
-| field       | string       | -      | 是       | 对应数据字段名              |
-| placeholder | string       | -      | 否       | 占位符文本                  |
-| list        | OptionData[] | -      | 是       | 选项数据数组                |
+| 参数        | 类型                     | 默认值 | 是否必填 | 说明                        |
+| ----------- | ------------------------ | ------ | -------- | --------------------------- |
+| type        | 'multiple'               | -      | 是       | 字段类型，固定值 'multiple' |
+| name        | string \| (() => string) | -      | 是       | 字段显示名称                |
+| field       | string                   | -      | 是       | 对应数据字段名              |
+| placeholder | string                   | -      | 否       | 占位符文本                  |
+| list        | OptionData[]             | -      | 是       | 选项数据数组                |
+
+`name` 支持传函数 `() => string` 惰性求值：展示或搜索时才会调用以获取显示名称。
 
 ### 事件
 

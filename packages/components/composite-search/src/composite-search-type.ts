@@ -7,7 +7,7 @@ export interface TmCompositeSearchInputFieldItem {
   /** 字段类型，固定值 'input' */
   type: 'input'
   /** 字段显示名称 */
-  name: string
+  name: string | (() => string)
   /** 对应数据字段名 */
   field: string
   /** 占位符文本（可选） */
@@ -21,7 +21,7 @@ export interface TmCompositeSearchSingleFieldItem {
   /** 字段类型，固定值 'single' */
   type: 'single'
   /** 字段显示名称 */
-  name: string
+  name: string | (() => string)
   /** 对应数据字段名 */
   field: string
   /** 占位符文本（可选） */
@@ -37,7 +37,7 @@ export interface TmCompositeSearchMultipleFieldItem {
   /** 字段类型，固定值 'multiple' */
   type: 'multiple'
   /** 字段显示名称 */
-  name: string
+  name: string | (() => string)
   /** 对应数据字段名 */
   field: string
   /** 占位符文本（可选） */

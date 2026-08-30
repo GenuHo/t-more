@@ -59,10 +59,7 @@ export const filterValueToPayloads = <T extends TableRowData>(
     const column = findColumnByField(columns, key)
     const searchConfig = column?.searchConfig
     const field = searchConfig?.field || key
-    // TODO 未来支持 title 为渲染函数（TNode）或通过列 render 渲染 title 时提取文本，当前仅支持 string
-    const name =
-      searchConfig?.name ||
-      (typeof column?.title === 'string' ? column.title : key)
+    const name = searchConfig?.name
     payloads.push({ field, name, value } as TmCompositeSearchPayload)
   })
   return payloads

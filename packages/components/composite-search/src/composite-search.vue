@@ -27,7 +27,7 @@
           >
             <div :class="ns.e('search-label')" @click.stop>
               <search-icon :class="ns.e('icon-search')" />
-              <span>{{ currentFieldItem?.name }}</span>
+              <span>{{ currentFieldName }}</span>
               <chevron-down-icon
                 :class="ns.e('icon-down')"
                 :style="iconDownStyle"
@@ -40,7 +40,7 @@
                   :key="item.field"
                   @click="handleSelect(item)"
                 >
-                  {{ item.name }}
+                  {{ resolveFieldName(item) }}
                 </t-dropdown-item>
               </t-dropdown-menu>
             </template>
@@ -103,6 +103,17 @@ watch(
   },
 )
 
+// name 支持惰性函数（title 为渲染函数时由 table 传入），统一解析为字符串
+const resolveFieldName = (item: TmCompositeSearchFieldItem): string => {
+  const name = item.name
+  return typeof name === 'function' ? name() : name
+}
+
+// 当前选中搜索字段的展示名
+const currentFieldName = computed(() =>
+  currentFieldItem.value ? resolveFieldName(currentFieldItem.value) : '',
+)
+
 // TODO 下面的focus类型报错，any类型待替换
 const searchInputRef = useTemplateRef<any>('searchInputRef')
 const handleSelect = (item: TmCompositeSearchFieldItem) => {
@@ -141,7 +152,7 @@ const handleClickSearch = () => {
     if (trimmedValue) {
       props?.onSearch?.({
         field: currentFieldItem.value.field,
-        name: currentFieldItem.value.name,
+        name: resolveFieldName(currentFieldItem.value),
         value: trimmedValue,
       })
       inputValue.value = ''
@@ -161,14 +172,14 @@ const handleClickSearch = () => {
 const handleReset = () => {
   if (!currentFieldItem.value) return
   const field = currentFieldItem.value.field
-  const name = currentFieldItem.value.name
+  const name = resolveFieldName(currentFieldItem.value)
   props?.onReset?.({ field, name })
 }
 
 const handleConfirm = () => {
   if (!currentFieldItem.value) return
   const field = currentFieldItem.value.field
-  const name = currentFieldItem.value.name
+  const name = resolveFieldName(currentFieldItem.value)
   if (currentFieldItem.value.type === 'single') {
     const value = filterRecord[currentFieldItem.value.field]
     // 未选中任何选项时走清除逻辑

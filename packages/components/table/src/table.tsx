@@ -17,6 +17,7 @@ import {
   deriveColumnFilter,
   filterValueToPayloads,
   payloadsToFilterValue,
+  renderTitle,
 } from './utils'
 
 import type {
@@ -79,6 +80,20 @@ export default defineComponent({
 
     const data = ref<TableRowData[] | undefined>()
 
+    //递归拿到所有的 column
+    // https://github.com/Tencent/tdesign-vue-next/blob/develop/packages/components/table/hooks/useFilter.tsx
+    function getAllColumns(
+      col: Array<PrimaryTableCol>,
+      columns: Array<PrimaryTableCol>,
+    ) {
+      col.forEach((column) => {
+        if (column.children) {
+          getAllColumns(column.children, columns)
+        }
+        columns.push(column)
+      })
+    }
+
     const searchFields = computed(() => {
       const result: TmCompositeSearchFieldItem[] = []
       props?.columns?.forEach((column) => {
@@ -87,8 +102,27 @@ export default defineComponent({
           result.push({
             ...searchConfig,
             field: searchConfig?.field || column.colKey!,
-            // TODO 未来支持 title 为渲染函数（TNode）或通过列 render 渲染 title 时提取文本，当前仅支持 string
-            name: searchConfig?.name || (column.title as string),
+            name:
+              searchConfig?.name ||
+              (() => {
+                return () => {
+                  const columns: Array<PrimaryTableCol> = []
+                  getAllColumns(computedColumns.value, columns)
+                  let col: PrimaryTableCol | undefined
+                  let index = -1
+                  for (let i = 0; i < columns.length; i++) {
+                    if (columns[i].colKey === column.colKey) {
+                      col = columns[i]
+                      index = i
+                      // TODO 待开发环境打印警告处理
+                      return col
+                        ? (renderTitle(slots, col, index) as string)
+                        : ''
+                    }
+                  }
+                  return ''
+                }
+              })(),
           })
         }
       })
