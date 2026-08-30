@@ -139,6 +139,8 @@ export default defineComponent({
     } = useCompositeSearch({
       searchFields,
       onSearchChange: () => {
+        // 搜索条件变化（筛选/搜索/标签关闭等）统一重置到第一页再请求
+        selfCurrent.value = defaultCurrent
         search()
       },
     })
@@ -182,9 +184,8 @@ export default defineComponent({
       selfPageSize.value = defaultPageSize
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
-    // 清空全部搜索条件：回到初始页，但保留用户选择的分页大小
+    // 清空全部搜索条件：页码由搜索变化统一重置，保留用户选择的分页大小
     const handleClearSearch = () => {
-      selfCurrent.value = defaultCurrent
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
     const onPaginationChange = (pageInfo: PageInfo) => {
