@@ -140,7 +140,7 @@ export default defineComponent({
       searchFields,
       onSearchChange: () => {
         // 搜索条件变化（筛选/搜索/标签关闭等）统一重置到第一页再请求
-        selfCurrent.value = defaultCurrent
+        selfCurrent.value = 1
         search()
       },
     })
@@ -148,9 +148,8 @@ export default defineComponent({
     const currentSearchParams = computed(() => {
       return getSearchParams()
     })
-    // 请求模式下的初始分页配置，供「重置」与「清空搜索」恢复使用
-    const defaultCurrent = props?.pagination?.current ?? 1
-    const defaultPageSize = props?.pagination?.pageSize ?? 10
+    const defaultCurrent = props?.pagination?.defaultCurrent ?? 1
+    const defaultPageSize = props?.pagination?.defaultPageSize ?? 10
     const selfCurrent = ref(defaultCurrent)
     const selfPageSize = ref(defaultPageSize)
     const total = ref(0)
@@ -178,10 +177,8 @@ export default defineComponent({
     onMounted(() => {
       search()
     })
-    // 重置按钮：分页与搜索条件全部恢复到初始状态
+    // 重置按钮：清空搜索条件
     const reset = () => {
-      selfCurrent.value = defaultCurrent
-      selfPageSize.value = defaultPageSize
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
     // 清空全部搜索条件：页码由搜索变化统一重置，保留用户选择的分页大小
