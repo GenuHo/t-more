@@ -40,8 +40,10 @@ import type {
   FilterValue,
   PageInfo,
   PrimaryTableCol,
+  SortOptions,
   TableFilterChangeContext,
   TableRowData,
+  TableSort,
 } from 'tdesign-vue-next'
 import { EnhancedTable } from 'tdesign-vue-next'
 import baseTableProps from 'tdesign-vue-next/es/table/base-table-props'
@@ -154,9 +156,23 @@ export default defineComponent({
     const selfPageSize = ref(defaultPageSize)
     const total = ref(0)
     const loading = ref(false)
+    // 请求模式的排序状态由组件内部管理：defaultSort 作为初始值
+    const selfSort = ref<TableSort | undefined>(props.defaultSort)
+    // 排序参数：单选/多选统一平铺为字符串，多字段以逗号拼接；无排序时不带这两个参数
+    const sortParams = computed(() => {
+      const sort = selfSort.value
+      if (!sort) return {}
+      const list = Array.isArray(sort) ? sort : [sort]
+      if (!list.length) return {}
+      return {
+        sortBy: list.map((item) => item.sortBy).join(','),
+        descending: list.map((item) => String(item.descending)).join(','),
+      }
+    })
     const search = async () => {
       const allParams = {
         ...currentSearchParams.value,
+        ...sortParams.value,
         current: selfCurrent.value,
         pageSize: selfPageSize.value,
       }
@@ -177,13 +193,23 @@ export default defineComponent({
     onMounted(() => {
       search()
     })
-    // 重置按钮：清空搜索条件
+    // 重置按钮：清空搜索条件与排序（清空搜索会自动触发请求）
     const reset = () => {
+      selfSort.value = undefined
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
-    // 清空全部搜索条件：页码由搜索变化统一重置，保留用户选择的分页大小
+    // 清空全部搜索条件：页码由搜索变化统一重置，保留用户选择的分页大小与排序
     const handleClearSearch = () => {
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
+    }
+    const handleSortChange = (
+      sort: TableSort | undefined,
+      options: SortOptions<TableRowData>,
+    ) => {
+      selfSort.value = sort
+      selfCurrent.value = 1 // 排序变化重置到第一页
+      search()
+      props.onSortChange?.(sort as TableSort, options)
     }
     const onPaginationChange = (pageInfo: PageInfo) => {
       selfCurrent.value = pageInfo.current
@@ -361,9 +387,12 @@ export default defineComponent({
           <EnhancedTable
             v-slots={slots}
             {...{
-              // 覆盖原来的onFilterChange
               ...tProps,
               onFilterChange: handleFilterChange,
+              // 请求模式下接管排序（自管理 sort 状态，defaultSort 作初始值）
+              ...(props?.request
+                ? { sort: selfSort.value, onSortChange: handleSortChange }
+                : {}),
             }}
             {...attrs}
             ref={enhancedTableRef}

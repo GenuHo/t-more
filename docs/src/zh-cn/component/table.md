@@ -50,6 +50,46 @@ table/operation-bar
 table/search
 :::
 
+## 配置排序
+
+给 `columns` 中需要排序的列配 `sorter: true`（布尔值）即可开启表头排序。request 模式下点击表头会**重新触发 `request` 请求并回到第一页**，排序状态由组件内部管理，适用于服务端排序。
+
+默认不开启 `multiple-sort` 时，同一时间只按**一个字段**排序：点击其他排序列会切换排序字段，再次点击可切换方向或清除排序。`default-sort` 传单个对象：
+
+:::demo
+table/sort-single
+:::
+
+开启 `multiple-sort` 后可**同时**按多列排序，排序字段按点击顺序排列、越靠前优先级越高（先按第一字段，相等时再按后续字段）；清空排序后 `request` 不再携带 `sortBy` / `descending`。`default-sort` 需以数组传入：
+
+:::demo
+table/sort-multiple
+:::
+
+### 排序参数
+
+`request` 接收的排序参数与分页、搜索条件平铺在同一对象中，字段名沿用 `tdesign` 的 `sortBy` / `descending`，多字段排序以**逗号拼接**并按位置对齐：
+
+```ts
+// 单字段排序
+{
+  sortBy: 'amount',     // 排序列的 colKey
+  descending: 'true',   // 'true' 降序 / 'false' 升序
+}
+
+// 多字段排序（开启 multiple-sort 后点击多个表头）
+{
+  sortBy: 'amount,createdAt',
+  descending: 'true,false', // 与 sortBy 位置一一对应
+}
+```
+
+### 行为约定
+
+- `sorter: true`（布尔）仅渲染排序图标并触发排序变化，组件**不会**本地重排 `data`；排序结果统一以 `sortBy` / `descending` 参数并入 `request` 交给接口处理，**不要**为列传 `sorter` 比较函数（那会触发 tdesign 对当前数据的本地排序，与「数据由接口返回」的模型冲突）。
+- 排序状态由组件内部管理，初始值取 `default-sort`（仅首次加载生效；开启 `multiple-sort` 时需以数组传入）；request 模式下 `sort` 属性被组件接管（与 `filter-value` 同理），但 `on-sort-change` 仍会触发。
+- 切换排序会重置回第一页；顶部「重置」按钮会**清空搜索条件与排序**（回到无排序）；搜索标签区的「清空全部」只清空搜索条件、保留当前排序。
+
 ## 配置操作列
 
 使用 `useOperationColumn` 配置表格行操作列，传入 `buttonDropdown` 定义操作按钮，按钮的 `onClick` 回调会接收到当前行数据。组件内部检测到 `colKey` 为 `TM_OPERATION_COL_KEY` 的列时，会自动计算操作列宽度以适应单元格内容。
