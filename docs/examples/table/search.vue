@@ -5,12 +5,14 @@
       :request="fetchData"
       row-key="id"
       :top-left-button-dropdown="topLeftButtonDropdown"
+      :default-filter-value="defaultFilterValue"
     ></tm-table>
   </div>
 </template>
 
 <script setup lang="tsx">
 import type { TmTableProps, TmTableCol } from '@tailor-more/t-more'
+import { onMounted, reactive } from 'vue'
 
 const statusNameListMap = {
   0: {
@@ -29,6 +31,8 @@ const statusNameListMap = {
     icon: <ErrorCircleFilledIcon />,
   },
 }
+
+const statusOptions = reactive<{ label: string; value: number }[]>([])
 
 const columns: TmTableCol[] = [
   {
@@ -52,11 +56,8 @@ const columns: TmTableCol[] = [
     width: 120,
     searchConfig: {
       type: 'single',
-      list: [
-        { label: 'Approved', value: 0 },
-        { label: 'Rejected', value: 1 },
-        { label: 'Expired', value: 2 },
-      ],
+      // 选项来自后端（见 fetchStatusOptions）：整体替换 statusOptions 的内容即可
+      list: statusOptions,
     },
     cell: (h, { row }) => {
       const status = row.status as keyof typeof statusNameListMap
@@ -113,6 +114,30 @@ const columns: TmTableCol[] = [
     },
   },
 ]
+
+// 初始化的 search 参数：键为可搜索列的 colKey（status 列，single 类型）
+// 预选 status = 1（Rejected）。此刻 status 的 list 尚未从接口返回，
+// 用于观察「初始筛选值 + 异步选项」下标签、表头筛选弹窗是否能正确回显 label
+const defaultFilterValue: TmTableProps['defaultFilterValue'] = {
+  status: 1,
+}
+
+// 模拟后端接口：status 列选项延迟 5s 返回（label 与 value 不一致，便于区分回显是否正确）
+const fetchStatusOptions = () =>
+  new Promise<{ label: string; value: number }[]>((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { label: 'Approved', value: 0 },
+        { label: 'Rejected', value: 1 },
+        { label: 'Expired', value: 2 },
+      ])
+    }, 5000)
+  })
+
+onMounted(async () => {
+  // 整体替换 statusOptions 的内容（保持数组引用不变）→ 触发搜索标签 / 搜索下拉 / 表头筛选更新
+  statusOptions.splice(0, statusOptions.length, ...(await fetchStatusOptions()))
+})
 
 const topLeftButtonDropdown: TmTableProps['topLeftButtonDropdown'] = {
   max: 2,
@@ -176,6 +201,8 @@ const fetchData = async (params: {
   [key: string]: any
 }) => {
   const { current, pageSize, ...searchParams } = params
+  // 打印实际发给接口的查询参数：首屏请求应已携带默认筛选 status=1
+  console.log('search.vue fetchData params', params)
 
   let filteredData = allData
 

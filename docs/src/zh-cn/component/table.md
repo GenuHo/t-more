@@ -33,6 +33,8 @@ table/operation-bar
 
 搜索条件会通过 `request` 参数传入，已选搜索条件以标签形式展示，支持单独关闭和全部清除。
 
+需要初始筛选条件时，可传 `default-filter-value`（键为可搜索列的 `colKey`），仅首次加载生效；之后的筛选状态由组件内部管理。
+
 ### 与表头筛选联动
 
 配置了 `searchConfig` 的列，会自动生成表头筛选图标，并与顶部搜索**双向同步**：
@@ -43,7 +45,13 @@ table/operation-bar
 表头筛选由组件根据 `searchConfig` 自动生成，列配置中不接受 `filter`。`searchConfig.field` 需保证全局唯一。
 
 ::: warning 注意
-`TmTable` 内部管理表头筛选状态，`filterValue` / `defaultFilterValue` 不对外暴露；`onFilterChange` 仍会在筛选变化时触发。
+`TmTable` 内部管理表头筛选状态：`filterValue` 不对外暴露（不接受受控），仅开放 `defaultFilterValue` 作初始值（首次加载生效）。`onFilterChange` 仍会在筛选变化时触发。
+:::
+
+::: tip `list` 支持响应式
+`searchConfig.list` 可以传入以 `reactive` 包裹的响应式对象（如 `reactive<OptionData[]>([])`）：拿到选项后**整体替换它的内容**（如 `splice`），传入的引用保持不变，搜索标签、搜索下拉与表头筛选弹窗都会响应式刷新为最新选项的 `label`。
+
+因此 `list` 来自后端请求（先渲染表格、后拿到选项）的场景同样适用：`defaultFilterValue` 仍会照常参与初始化，首屏 `request` 参数与搜索标签都会带上初始筛选值；选项返回前标签只展示字段名，选项返回后自动回显为 `字段名 : label`。
 :::
 
 :::demo
@@ -110,7 +118,7 @@ table/operation-column
 
 ### TmTableProps
 
-`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上移除了 `filterValue` / `defaultFilterValue`（表头筛选状态由组件内部管理），并新增了以下属性：
+`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上移除了 `filterValue`（表头筛选运行态由组件内部管理，仅开放 `defaultFilterValue` 作初始值），并新增了以下属性：
 
 | 参数                  | 类型                                                    | 默认值                 | 说明                                                                                                                                      |
 | --------------------- | ------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

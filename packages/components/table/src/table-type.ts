@@ -57,10 +57,7 @@ export type TmTableTopRightButtonItem = {
  */
 export interface TmTableProps<
   T extends TableRowData = TableRowData,
-> extends Omit<
-  EnhancedTableProps<T>,
-  'columns' | 'filterValue' | 'defaultFilterValue'
-> {
+> extends Omit<EnhancedTableProps<T>, 'columns' | 'filterValue'> {
   /**
    * 表格数据请求接口
    * 接收查询参数，返回 Promise，用于异步获取表格数据

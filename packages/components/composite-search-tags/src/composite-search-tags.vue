@@ -28,7 +28,6 @@ import type {
   TmCompositeSearchFieldItem,
   TmCompositeSearchPayload,
 } from '@tailor-more/t-more-components'
-import type { OptionData } from 'tdesign-vue-next'
 import type { TmCompositeSearchTagsProps } from './composite-search-tags-type'
 
 defineOptions({
@@ -47,34 +46,43 @@ const getFieldConfig = (
   return props.searchFields?.find((item) => item.field === field)
 }
 
-const getOptionLabel = (
-  list: OptionData[] | undefined,
+// 字段展示名：与顶部搜索一致，从 searchFields 反查（name 支持惰性函数），
+// 找不到对应字段配置时兜底用载荷自带的 name —— 避免默认筛选/表头筛选产生的
+// 载荷因缺 searchConfig.name 而显示成 undefined
+const getFieldName = (tag: TmCompositeSearchPayload): string => {
+  const fieldConfig = getFieldConfig(tag.field)
+  const name = fieldConfig ? fieldConfig.name : tag.name
+  return typeof name === 'function' ? name() : (name ?? '')
+}
+
+const getValueText = (
+  fieldConfig: TmCompositeSearchFieldItem | undefined,
   value: unknown,
 ): string => {
-  const item = list?.find((option) => {
-    const optionValue =
-      typeof option === 'object' && option !== null ? option.value : option
-    return optionValue === value
-  })
-  if (item === undefined) return String(value)
-  return typeof item === 'object' ? (item.label ?? String(value)) : String(item)
+  if (fieldConfig?.type === 'single' || fieldConfig?.type === 'multiple') {
+    const item = fieldConfig.list.find((option) => {
+      const optionValue = option.value
+      return optionValue === value
+    })
+    if (item === undefined) return ''
+    return item.label ?? ''
+  }
+  return String(value)
 }
 
 const getTagText = (tag: TmCompositeSearchPayload) => {
   const fieldConfig = getFieldConfig(tag.field)
-  const list =
-    fieldConfig?.type === 'single' || fieldConfig?.type === 'multiple'
-      ? fieldConfig.list
-      : undefined
   let valueText: string
   if (Array.isArray(tag.value)) {
     valueText = tag.value
-      .map((item) => getOptionLabel(list, item))
+      .map((item) => getValueText(fieldConfig, item))
       .join(t('tm.compositeSearchTags.labelSplit'))
   } else {
-    valueText = getOptionLabel(list, tag.value)
+    valueText = getValueText(fieldConfig, tag.value)
   }
-  return tag.name + t('tm.compositeSearchTags.nameLabelSplit') + valueText
+  return (
+    getFieldName(tag) + t('tm.compositeSearchTags.nameLabelSplit') + valueText
+  )
 }
 
 const handleClose = (tag: TmCompositeSearchPayload) => {

@@ -131,6 +131,22 @@ export default defineComponent({
       return result
     })
 
+    // 参与筛选的列（排除操作列），供派生 filter 注入、filterValue 转换与初始筛选复用
+    const filterableColumns = computed<TmTableCol[]>(() => {
+      return (
+        props.columns?.filter(
+          (column) => column.colKey !== TM_OPERATION_COL_KEY,
+        ) ?? []
+      )
+    })
+
+    // defaultFilterValue 仅作为初始筛选条件：与表头筛选共用 filterValueToPayloads 转换，
+    // 映射为搜索负载，挂载时通过 setSearchPayloads 注入；之后状态由组件内部管理，重置回到无筛选
+    const defaultSearchPayloads = filterValueToPayloads(
+      props.defaultFilterValue || {},
+      filterableColumns.value,
+    )
+
     const {
       clearSearchPayloads,
       searchPayloads,
@@ -191,7 +207,13 @@ export default defineComponent({
       }
     }
     onMounted(() => {
-      search()
+      // 有初始筛选条件时：整体设置搜索负载，其 onSearchChange 会统一触发首次请求；
+      // 无则直接走首次请求。两种路径都只发一次首屏请求
+      if (defaultSearchPayloads.length) {
+        setSearchPayloads(defaultSearchPayloads)
+      } else {
+        search()
+      }
     })
     // 重置按钮：清空搜索条件与排序（清空搜索会自动触发请求）
     const reset = () => {
@@ -292,15 +314,6 @@ export default defineComponent({
         })
       },
     )
-    // 参与筛选的列（排除操作列），供派生 filter 注入与 filterValue 转换复用
-    const filterableColumns = computed<TmTableCol[]>(() => {
-      return (
-        props.columns?.filter(
-          (column) => column.colKey !== TM_OPERATION_COL_KEY,
-        ) ?? []
-      )
-    })
-
     const computedColumns = computed(() => {
       const cols: PrimaryTableCol[] = []
       props.columns?.forEach((column) => {
