@@ -114,11 +114,12 @@ const currentFieldName = computed(() =>
   currentFieldItem.value ? resolveFieldName(currentFieldItem.value) : '',
 )
 
-// TODO 下面的focus类型报错，any类型待替换
-const searchInputRef = useTemplateRef<any>('searchInputRef')
+const searchInputRef = useTemplateRef('searchInputRef')
 const handleSelect = (item: TmCompositeSearchFieldItem) => {
   currentFieldItem.value = item
-  searchInputRef.value?.focus()
+  ;(searchInputRef.value?.$el as HTMLElement | undefined)
+    ?.querySelector('input')
+    ?.focus()
 
   if (isSingleOrMultipleFieldItem(currentFieldItem.value)) {
     popupVisible.value = true
