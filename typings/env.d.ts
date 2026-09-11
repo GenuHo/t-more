@@ -11,4 +11,13 @@ declare module 'vue' {
   }
 }
 
+// 仅声明用到的 process 成员，避免引入 @types/node 把 Node 全局混进浏览器端的类型环境
+declare global {
+  const process: {
+    env: {
+      NODE_ENV: string
+    }
+  }
+}
+
 export {}

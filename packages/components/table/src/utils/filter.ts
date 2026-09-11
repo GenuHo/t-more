@@ -4,6 +4,7 @@ import type {
   TableRowData,
 } from 'tdesign-vue-next'
 import type { TmCompositeSearchPayload } from '@tailor-more/t-more-components'
+import { debugWarn } from '@tailor-more/t-more-utils'
 import type { TmTableCol } from '../table-type'
 
 /**
@@ -57,6 +58,10 @@ export const filterValueToPayloads = <T extends TableRowData>(
     const value = filterValue[key]
     if (isFilterValueEmpty(value)) return
     const column = findColumnByField(columns, key)
+    // 匹配不到列时 key 会被当作 field 原样发给请求，且标签没有名字，这里提示来源
+    if (!column) {
+      debugWarn('TmTable', `No column matches the filter key "${key}".`)
+    }
     const searchConfig = column?.searchConfig
     const field = searchConfig?.field || key
     const name = searchConfig?.name

@@ -7,8 +7,9 @@ import type {
   TmCompositeSearchProps,
 } from '../composite-search-type'
 import type { MaybeRef } from 'vue'
-import { computed, ref, unref } from 'vue'
+import { computed, ref, unref, watch } from 'vue'
 import type { TmCompositeSearchTagsProps } from '@tailor-more/t-more-components'
+import { debugWarn } from '@tailor-more/t-more-utils'
 
 /**
  * 组合搜索组件的绑定属性（由 compositeSearchProps 返回）
@@ -68,6 +69,26 @@ interface UseCompositeSearchOptions {
  */
 export const useCompositeSearch = (options: UseCompositeSearchOptions) => {
   const { onSearchChange, searchFields } = options
+
+  // field 是搜索负载的唯一键，重复会让两个搜索条件互相覆盖
+  if (process.env.NODE_ENV !== 'production') {
+    watch(
+      () => unref(searchFields),
+      (fields) => {
+        const seen = new Set<string>()
+        fields.forEach((item) => {
+          if (seen.has(item.field)) {
+            debugWarn(
+              'TmCompositeSearch',
+              `Duplicate search field "${item.field}".`,
+            )
+          }
+          seen.add(item.field)
+        })
+      },
+      { immediate: true },
+    )
+  }
 
   /**
    * 存储搜索负载的响应式数组

@@ -34,7 +34,7 @@ import {
 } from '@tailor-more/t-more-components'
 import { SCREEN_WIDTH } from '@tailor-more/t-more-constants'
 import { useNamespace } from '@tailor-more/t-more-hooks'
-import { deleteObjectKeys } from '@tailor-more/t-more-utils'
+import { debugWarn, deleteObjectKeys } from '@tailor-more/t-more-utils'
 
 import type {
   FilterValue,
@@ -51,7 +51,7 @@ import primaryTableProps from 'tdesign-vue-next/es/table/primary-table-props'
 import enhancedTableProps from 'tdesign-vue-next/es/table/enhanced-table-props'
 
 import { useElementSize, useWindowSize } from '@vueuse/core'
-import { isNumber } from 'lodash-unified'
+import { isNumber, isString } from 'lodash-unified'
 
 import '@tailor-more/t-more-theme-chalk/table.less'
 
@@ -110,19 +110,28 @@ export default defineComponent({
                 return () => {
                   const columns: Array<PrimaryTableCol> = []
                   getAllColumns(computedColumns.value, columns)
-                  let col: PrimaryTableCol | undefined
-                  let index = -1
-                  for (let i = 0; i < columns.length; i++) {
-                    if (columns[i].colKey === column.colKey) {
-                      col = columns[i]
-                      index = i
-                      // TODO 待开发环境打印警告处理
-                      return col
-                        ? (renderTitle(slots, col, index) as string)
-                        : ''
-                    }
+                  const index = columns.findIndex(
+                    (col) => col.colKey === column.colKey,
+                  )
+                  const col = columns[index]
+                  if (!col) {
+                    debugWarn(
+                      'TmTable',
+                      `Column "${column.colKey}" was not found, ` +
+                        'so its search label falls back to an empty string.',
+                    )
+                    return ''
                   }
-                  return ''
+                  const title = renderTitle(slots, col, index)
+                  // 列头是渲染函数或插槽时 renderTitle 返回的是 VNode，
+                  // 无法作为字符串标签展示，这里只提示，不改变返回值
+                  if (!isString(title)) {
+                    debugWarn(
+                      'TmTable',
+                      `The title of column "${column.colKey}" is not a string.`,
+                    )
+                  }
+                  return title as string
                 }
               })(),
           })
@@ -199,7 +208,7 @@ export default defineComponent({
           data.value = requestData?.results || []
           total.value = requestData?.total || 0
         } catch (error) {
-          console.error(error)
+          console.error('[TmTable] request failed:', error)
           data.value = []
         } finally {
           loading.value = false
