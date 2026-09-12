@@ -34,6 +34,8 @@ export default defineComponent({
   setup(props) {
     const ns = useNamespace('button-dropdown')
     const { t } = useLocale()
+    // 浮层挂在 body 上，样式只能靠这个类名定位
+    const popupInnerClass = ns.e('popup-inner')
     // 根据 max 处理出来需要渲染 button 的列表
     // max 表示总展示按钮数量（包含"更多"按钮）；max = 0 时不展示任何按钮；max < 0 时展示全部按钮，不折叠
     const buttons = computed(() => {
@@ -66,7 +68,6 @@ export default defineComponent({
         return content(h)
       }
     }
-    // TODO 解决 dropdown 菜单没有撑满的问题，tooltip悬浮产生提示区域有问题
     const renderDropdownItem = (buttonChildren: TmButtonDropdownItem[]) => {
       return buttonChildren.map((button) => {
         // 这里还是要分开写才能渲染子菜单
@@ -147,7 +148,11 @@ export default defineComponent({
           )
         } else {
           return (
-            <TDropdown maxColumnWidth="auto" {...button.dropdownProps}>
+            <TDropdown
+              maxColumnWidth="auto"
+              popupProps={{ overlayInnerClassName: popupInnerClass }}
+              {...button.dropdownProps}
+            >
               {{
                 default: () => (
                   <TTooltip {...button.tooltipProps}>
@@ -171,6 +176,7 @@ export default defineComponent({
         return (
           <TDropdown
             maxColumnWidth="auto"
+            popupProps={{ overlayInnerClassName: popupInnerClass }}
             {...props?.moreButtonProps?.dropdownProps}
           >
             {{
