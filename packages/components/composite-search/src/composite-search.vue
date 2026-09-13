@@ -59,7 +59,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { isNil } from 'lodash-unified'
+import { isArray, isNil } from 'lodash-unified'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
 import type {
@@ -174,6 +174,7 @@ const handleReset = () => {
   if (!currentFieldItem.value) return
   const field = currentFieldItem.value.field
   const name = resolveFieldName(currentFieldItem.value)
+  clearFilterValue(field)
   props?.onReset?.({ field, name })
 }
 
@@ -181,31 +182,23 @@ const handleConfirm = () => {
   if (!currentFieldItem.value) return
   const field = currentFieldItem.value.field
   const name = resolveFieldName(currentFieldItem.value)
-  if (currentFieldItem.value.type === 'single') {
-    const value = filterRecord[currentFieldItem.value.field]
-    // 未选中任何选项时走清除逻辑
-    if (isNil(value)) {
-      props?.onReset?.({ field, name })
-      return
-    }
-    props?.onSearch?.({
-      field,
-      name,
-      value,
-    })
-  } else if (currentFieldItem.value.type === 'multiple') {
-    const value = filterRecord[currentFieldItem.value.field] || []
-    // 未选中任何选项时走清除逻辑
-    if (value.length === 0) {
-      props?.onReset?.({ field, name })
-      return
-    }
-    props?.onSearch?.({
-      field,
-      name,
-      value,
-    })
+  // 确认的值就是弹层里展示的值：临时值优先，否则用已确认的值
+  const value = getFilterValue(currentFieldItem.value)
+  // 未选中任何选项时走清除逻辑
+  if (isNil(value) || (isArray(value) && value.length === 0)) {
+    clearFilterValue(field)
+    props?.onReset?.({ field, name })
+    return
   }
+  confirmedFilterRecord.value = {
+    ...confirmedFilterRecord.value,
+    [field]: value,
+  }
+  props?.onSearch?.({
+    field,
+    name,
+    value,
+  })
 }
 
 const isSingleOrMultipleFieldItem = (
@@ -216,8 +209,49 @@ const isSingleOrMultipleFieldItem = (
   return ['single', 'multiple'].includes(item.type)
 }
 
-const filterRecord: Record<string, any> = {}
+// 弹层内的临时筛选值：change 时记录，点击确认才生效
+const tempFilterRecord = ref<Record<string, any>>({})
+// 已确认的筛选值：外部条件同步进来，点击确认时更新，打开弹层时用它回显
+const confirmedFilterRecord = ref<Record<string, any>>({})
 const popupVisible = ref(false)
+
+// 外部条件（初始筛选、清空标签等）变化时同步已确认值，未确认的临时值一并失效
+watch(
+  () => props.value,
+  (value) => {
+    const confirmed: Record<string, any> = {}
+    value?.forEach((item) => {
+      confirmed[item.field] = item.value
+    })
+    confirmedFilterRecord.value = confirmed
+    tempFilterRecord.value = {}
+  },
+  // deep：使用方可能就地修改传入的条件数组
+  { immediate: true, deep: true },
+)
+
+// 传给筛选组件的受控值：多选必须是数组，单选未选中时用 undefined
+const getFilterValue = (item: TmCompositeSearchFieldItem) => {
+  const value =
+    tempFilterRecord.value[item.field] ??
+    confirmedFilterRecord.value[item.field]
+  return value ?? (item.type === 'multiple' ? [] : undefined)
+}
+
+// 清掉某字段的已确认值，并丢弃弹层里的临时值
+const clearFilterValue = (field: string) => {
+  const confirmed = { ...confirmedFilterRecord.value }
+  delete confirmed[field]
+  confirmedFilterRecord.value = confirmed
+  tempFilterRecord.value = {}
+}
+
+// 弹层关闭（确认、重置、点搜索、点外部、切换字段等）时丢弃未确认的临时值
+watch(popupVisible, (visible) => {
+  if (!visible) {
+    tempFilterRecord.value = {}
+  }
+})
 
 const getPopupContent = () => {
   if (!currentFieldItem.value) {
@@ -226,14 +260,10 @@ const getPopupContent = () => {
   if (!isSingleOrMultipleFieldItem(currentFieldItem.value)) {
     return
   }
-  const defaultValue = (props.value ?? []).find(
-    (item) => item.field === currentFieldItem.value?.field,
-  )?.value
-  if (popupVisible.value) {
-    filterRecord[currentFieldItem.value.field] = defaultValue
-  }
   const filterComponentProps: Record<string, any> = {
     options: currentFieldItem.value?.list || [],
+    // 与 tdesign 的自定义筛选器约定一致：只依赖 value 和 change
+    value: getFilterValue(currentFieldItem.value),
     onChange: (val: any) => {
       if (!currentFieldItem.value) {
         return
@@ -241,9 +271,10 @@ const getPopupContent = () => {
       if (!isSingleOrMultipleFieldItem(currentFieldItem.value)) {
         return
       }
-      filterRecord[currentFieldItem.value.field] = val // 记录筛选值
+      const field = currentFieldItem.value.field
+      // 记录临时筛选值，点击确认前不生效
+      tempFilterRecord.value = { ...tempFilterRecord.value, [field]: val }
     },
-    defaultValue,
   }
   const renderComponent = () => {
     if (currentFieldItem.value?.type === 'single') {
