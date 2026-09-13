@@ -5,7 +5,7 @@ import type {
   TNode,
 } from 'tdesign-vue-next'
 import type {
-  TmButtonDropdownProps,
+  TmButtonDropdownPropsWithCustomOnClick,
   TmCompositeSearchFieldItem,
 } from '@tailor-more/t-more-components'
 import type { PartialByKeys } from '@tailor-more/t-more-utils'
@@ -51,13 +51,32 @@ export type TmTableTopRightButtonItem = {
    */
   onClick?: (e: MouseEvent) => void
 }
+
+/**
+ * 表格行选择数据
+ * 由 TmTable 内部记录后透传给顶部左侧下拉按钮的 onClick
+ */
+export interface TmTableSelection<T extends TableRowData = TableRowData> {
+  /** 选中行的 key 列表 */
+  selectedRowKeys: (string | number)[]
+
+  /** 选中行的数据，命名与 tdesign SelectOptions 一致 */
+  selectedRowData: T[]
+}
+
 /**
  * TmTable 组件属性类型
  * 扩展自 TDesign 的 EnhancedTableProps，增加了请求接口、搜索配置、操作按钮等功能
+ *
+ * selectedRowKeys 与 filterValue 一样由组件内部接管，不再受控；
+ * 初始无选中，只能由用户交互产生，变化通过 onSelectChange 获取
  */
 export interface TmTableProps<
   T extends TableRowData = TableRowData,
-> extends Omit<EnhancedTableProps<T>, 'columns' | 'filterValue'> {
+> extends Omit<
+  EnhancedTableProps<T>,
+  'columns' | 'filterValue' | 'selectedRowKeys' | 'defaultSelectedRowKeys'
+> {
   /**
    * 表格数据请求接口
    * 接收查询参数，返回 Promise，用于异步获取表格数据
@@ -86,6 +105,9 @@ export interface TmTableProps<
   /**
    * 表格顶部左侧下拉按钮配置
    * 使用 TmButtonDropdown 组件的属性配置
+   * 按钮的 onClick 会额外收到当前的行选择数据 TmTableSelection 和鼠标事件
    */
-  topLeftButtonDropdown?: TmButtonDropdownProps
+  topLeftButtonDropdown?: TmButtonDropdownPropsWithCustomOnClick<
+    (selection: TmTableSelection<T>, e: MouseEvent) => void
+  >
 }

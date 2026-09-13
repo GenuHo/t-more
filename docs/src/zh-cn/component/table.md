@@ -114,18 +114,34 @@ table/sort-multiple
 table/operation-column
 :::
 
+## 行选择
+
+在 `columns` 中加入 `colKey` 为 `row-select` 的列即可开启行选择，`type` 取 `'multiple'` 多选、`'single'` 单选。
+
+配置了 `topLeftButtonDropdown` 时，按钮的 `onClick` 会额外收到当前选中数据 `TmTableSelection`（`{ selectedRowKeys, selectedRowData }`）和鼠标事件 —— 批量操作不必自己维护选中状态：
+
+:::demo
+table/row-selection
+:::
+
+`selectedRowData` 直接透传 `tdesign` 的选择结果，跨页是否保留选中由 `reserve-selected-row-on-paginate` 决定（默认 `true`）：默认翻页保留，此时按钮会一并拿到其他页选中行的数据；设为 `false` 则翻页自动清空选中，按钮拿到的也同步为空。
+
+::: warning 注意
+`TmTable` 内部管理行选择：`selectedRowKeys` 与 `defaultSelectedRowKeys` 都不对外暴露（不接受受控，初始也无选中），选中只能由用户交互产生。`onSelectChange` 仍会在选中变化时触发。
+:::
+
 ## Table API
 
 ### TmTableProps
 
-`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上移除了 `filterValue`（表头筛选运行态由组件内部管理，仅开放 `defaultFilterValue` 作初始值），并新增了以下属性：
+`TmTableProps` 继承自 `tdesign-vue-next` 的 [`EnhancedTableProps`](https://tdesign.tencent.com/vue-next/components/table?tab=api#enhancedtable-props)，在此基础上移除了 `filterValue`（表头筛选运行态由组件内部管理，仅开放 `defaultFilterValue` 作初始值）与 `selectedRowKeys`、`defaultSelectedRowKeys`（行选择由组件内部管理，不接受受控、初始也无选中），并新增了以下属性：
 
-| 参数                  | 类型                                                    | 默认值                 | 说明                                                                                                                                      |
-| --------------------- | ------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| request               | `(params: any) => Promise<any>`                         | -                      | 表格数据请求接口。接收查询参数（包含分页、排序、搜索等），需返回 `{ results: any[], total: number }` 格式的数据                           |
-| columns               | `TmTableCol[]`                                          | -                      | 表格列配置数组，扩展了 [PrimaryTableCol](https://tdesign.tencent.com/vue-next/components/table?tab=api#primarytablecol)，额外支持搜索配置 |
-| topRightButtons       | `('reset' \| 'refresh' \| TmTableTopRightButtonItem)[]` | `['reset', 'refresh']` | 表格顶部右侧按钮配置。`'reset'` 为重置按钮，`'refresh'` 为刷新按钮，也可传入自定义按钮对象                                                |
-| topLeftButtonDropdown | `TmButtonDropdownProps`                                 | -                      | 表格顶部左侧下拉按钮配置，用于配置批量操作等场景。使用 [ButtonDropdown](/zh-cn/component/button-dropdown) 组件的属性                      |
+| 参数                  | 类型                                                                                           | 默认值                 | 说明                                                                                                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| request               | `(params: any) => Promise<any>`                                                                | -                      | 表格数据请求接口。接收查询参数（包含分页、排序、搜索等），需返回 `{ results: any[], total: number }` 格式的数据                                                                             |
+| columns               | `TmTableCol[]`                                                                                 | -                      | 表格列配置数组，扩展了 [PrimaryTableCol](https://tdesign.tencent.com/vue-next/components/table?tab=api#primarytablecol)，额外支持搜索配置                                                   |
+| topRightButtons       | `('reset' \| 'refresh' \| TmTableTopRightButtonItem)[]`                                        | `['reset', 'refresh']` | 表格顶部右侧按钮配置。`'reset'` 为重置按钮，`'refresh'` 为刷新按钮，也可传入自定义按钮对象                                                                                                  |
+| topLeftButtonDropdown | `TmButtonDropdownPropsWithCustomOnClick<(selection: TmTableSelection, e: MouseEvent) => void>` | -                      | 表格顶部左侧下拉按钮配置，用于配置批量操作等场景。按钮的 `onClick` 会额外收到当前选中数据 `TmTableSelection` 和鼠标事件。使用 [ButtonDropdown](/zh-cn/component/button-dropdown) 组件的属性 |
 
 ### TmTableCol
 
@@ -144,6 +160,15 @@ table/operation-column
 | type    | `'refresh' \| 'reset' \| string`   | -      | 按钮类型。`'refresh'` 为刷新按钮，`'reset'` 为重置按钮，其他字符串为自定义类型 |
 | render  | `TNode<TmTableTopRightButtonItem>` | -      | 自定义渲染函数，用于自定义按钮的渲染内容                                       |
 | onClick | `(e: MouseEvent) => void`          | -      | 按钮点击事件回调                                                               |
+
+### TmTableSelection
+
+行选择数据，作为 `topLeftButtonDropdown` 中按钮 `onClick` 的第一个参数传入：
+
+| 参数            | 类型                   | 说明                                                                                        |
+| --------------- | ---------------------- | ------------------------------------------------------------------------------------------- |
+| selectedRowKeys | `(string \| number)[]` | 选中行的 `rowKey` 列表，字段名与 `tdesign` 的 `SelectOptions` 一致                          |
+| selectedRowData | `TableRowData[]`       | 选中行的数据，直接透传 `tdesign` 的选择结果，跨页语义由 `reserveSelectedRowOnPaginate` 决定 |
 
 ### useOperationColumn
 

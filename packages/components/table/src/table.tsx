@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue'
 
-import type { TmTableCol, TmTableProps } from './table-type'
+import type { TmTableCol, TmTableProps, TmTableSelection } from './table-type'
 import { TM_TABLE_OWN_KEYS } from './constants'
 import { defaultTableTopRightButtons } from './table-default'
 import {
@@ -21,6 +21,9 @@ import {
 } from './utils'
 
 import type {
+  TmButtonDropdownItem,
+  TmButtonDropdownItemWithCustomOnClick,
+  TmButtonDropdownProps,
   TmCompositeSearchFieldItem,
   TmCompositeSearchTagsInstance,
 } from '@tailor-more/t-more-components'
@@ -37,6 +40,7 @@ import { useNamespace } from '@tailor-more/t-more-hooks'
 import { debugWarn, deleteObjectKeys } from '@tailor-more/t-more-utils'
 
 import type {
+  EnhancedTableProps,
   FilterValue,
   PageInfo,
   PrimaryTableCol,
@@ -354,6 +358,51 @@ export default defineComponent({
       props.onFilterChange?.(filterValue, context)
     }
 
+    // 行选择由组件内部完全接管，初始无选中，只能由用户交互产生
+    const selfSelectedRowKeys = ref<(string | number)[]>([])
+    // selectedRowData 直接用 tdesign 算好的，跨页保留与否由使用方的配置决定
+    const selectedRowData = ref<TableRowData[]>([])
+    const handleSelectChange: NonNullable<
+      EnhancedTableProps['onSelectChange']
+    > = (selectedRowKeys, context) => {
+      selfSelectedRowKeys.value = selectedRowKeys
+      selectedRowData.value = context.selectedRowData
+      props.onSelectChange?.(selectedRowKeys, context)
+    }
+    // 把选中数据注入按钮 onClick，子菜单递归
+    const getTopLeftButtonDropdownProps = ():
+      | TmButtonDropdownProps
+      | undefined => {
+      const dropdownProps = props.topLeftButtonDropdown
+      if (!dropdownProps) {
+        return undefined
+      }
+      const wrapButtons = (
+        buttons: TmButtonDropdownItemWithCustomOnClick<
+          (selection: TmTableSelection, e: MouseEvent) => void
+        >[],
+      ): TmButtonDropdownItem[] => {
+        return buttons.map((button) => ({
+          ...button,
+          onClick: (e: MouseEvent) => {
+            button.onClick?.(
+              {
+                selectedRowKeys: selfSelectedRowKeys.value,
+                selectedRowData: selectedRowData.value,
+              },
+              e,
+            )
+          },
+          children: button.children ? wrapButtons(button.children) : undefined,
+        }))
+      }
+      const { buttons, ...rest } = dropdownProps
+      return {
+        ...rest,
+        buttons: buttons ? wrapButtons(buttons) : undefined,
+      }
+    }
+
     expose({
       getTableData: search,
     })
@@ -378,7 +427,7 @@ export default defineComponent({
                 ]}
               >
                 <TmButtonDropdown
-                  {...props?.topLeftButtonDropdown}
+                  {...getTopLeftButtonDropdownProps()}
                 ></TmButtonDropdown>
               </div>
               {isTopLeftShowCompositeSearch.value && (
@@ -411,6 +460,9 @@ export default defineComponent({
             {...{
               ...tProps,
               onFilterChange: handleFilterChange,
+              onSelectChange: handleSelectChange,
+              // 内部受控：始终传数组，tdesign 靠 hasOwnProperty 判定受控并读这个值
+              selectedRowKeys: selfSelectedRowKeys.value,
               // 请求模式下接管排序（自管理 sort 状态，defaultSort 作初始值）
               ...(props?.request
                 ? { sort: selfSort.value, onSortChange: handleSortChange }
