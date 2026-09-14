@@ -6,6 +6,8 @@ import type {
 import type { TmCompositeSearchPayload } from '@tailor-more/t-more-components'
 import { debugWarn } from '@tailor-more/t-more-utils'
 import type { TmTableCol } from '../table-type'
+import CompositeSearchFilterSingle from '@tailor-more/t-more-components/composite-search/src/composite-search-filter-single'
+import CompositeSearchFilterMultiple from '@tailor-more/t-more-components/composite-search/src/composite-search-filter-multiple'
 
 /**
  * 根据列的 searchConfig 自动派生表头筛选配置
@@ -15,8 +17,13 @@ export const deriveColumnFilter = (
   searchConfig: NonNullable<TmTableCol['searchConfig']>,
 ): TableColumnFilter => {
   if (searchConfig.type === 'single' || searchConfig.type === 'multiple') {
+    const isMultiple = searchConfig.type === 'multiple'
     return {
-      type: searchConfig.type,
+      component: isMultiple
+        ? CompositeSearchFilterMultiple
+        : CompositeSearchFilterSingle,
+      props: { options: searchConfig.list },
+      resetValue: isMultiple ? [] : undefined,
       list: searchConfig.list,
       showConfirmAndReset: true,
     }

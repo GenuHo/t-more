@@ -42,7 +42,7 @@ table/operation-bar
 - 在表头筛选（`single` / `multiple` 带 `list` 选项、`input` 为文本输入，均需点击「确定」后生效），会同步更新顶部搜索标签与 `request` 参数；
 - 在顶部搜索，也会同步表头筛选图标的高亮状态与弹窗内的已选值。
 
-表头筛选由组件根据 `searchConfig` 自动生成，列配置中不接受 `filter`。`searchConfig.field` 需保证全局唯一。
+表头筛选由组件根据 `searchConfig` 自动生成，列配置中不接受 `filter`。`searchConfig.field` 需保证全局唯一。`single` / `multiple` 弹窗复用顶部搜索的筛选组件，两者的交互与样式一致。
 
 ::: warning 注意
 `TmTable` 内部管理表头筛选状态：`filterValue` 不对外暴露（不接受受控），仅开放 `defaultFilterValue` 作初始值（首次加载生效）。`onFilterChange` 仍会在筛选变化时触发。

@@ -49,4 +49,17 @@
       }
     }
   }
+
+  .@{prefix}-table__filter-pop
+    .@{prefix}-table__filter-pop-content
+    .@{prefix}-table__filter-pop-content-inner {
+    padding-left: 0;
+    padding-right: 0;
+
+    // 单选/多选的左右间距由选项自带，输入框筛选（内置 Input）没有，需要补回来
+    > .@{prefix}-input__wrap {
+      margin-left: @comp-paddingLR-l;
+      margin-right: @comp-paddingLR-l;
+    }
+  }
 }
