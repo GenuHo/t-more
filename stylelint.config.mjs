@@ -15,6 +15,10 @@ export default {
     {
       files: ['**/*.less'],
       customSyntax: 'postcss-less',
+      rules: {
+        // 该规则只适用于 CSS，Less 变量与字面量混用（如 `1px solid @border`）会被误判
+        'declaration-property-value-no-unknown': null,
+      },
     },
     {
       files: ['**/*.vue'],
