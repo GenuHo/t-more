@@ -2,6 +2,7 @@ import type { PropType, ComputedRef } from 'vue'
 import {
   computed,
   defineComponent,
+  getCurrentInstance,
   h,
   nextTick,
   onMounted,
@@ -81,6 +82,7 @@ export default defineComponent({
   },
   setup(props: TmTableProps, { attrs, expose, slots }) {
     const enhancedTableRef = useTemplateRef('enhancedTableRef')
+    const instance = getCurrentInstance()
 
     const ns = useNamespace('table')
 
@@ -408,8 +410,9 @@ export default defineComponent({
     })
 
     return () => {
+      // 只转发外层真正传进来的 props：instance.props 会带上所有声明过却没传的 key，下层靠 key 是否存在判定受控
       const tProps = {
-        ...props,
+        ...instance?.vnode.props,
       }
       // 这里需要删除不是EnhancedTable的属性
       deleteObjectKeys(tProps, TM_TABLE_OWN_KEYS)
