@@ -2,6 +2,7 @@
   "extends": "./tsconfig.node.json",
   "compilerOptions": {
     "composite": true,
+    "moduleResolution": "bundler",
     "types": ["node"]
   },
   "include": ["**/vite.config.*", "**/vitest.config.*"]
