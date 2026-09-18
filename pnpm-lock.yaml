@@ -69,6 +69,9 @@ importers:
       markdown-it-async:
         specifier: ^2.2.0
         version: 2.2.0
+      playwright:
+        specifier: 1.63.0
+        version: 1.63.0
       postcss:
         specifier: ^8.5.14
         version: 8.5.14
@@ -5732,7 +5735,7 @@ snapshots:
 
   flat-cache@4.0.1:
     dependencies:
-      flatted: 3.4.2
+      flatted: 3.4.4
       keyv: 4.5.4
 
   flat-cache@6.1.21:
