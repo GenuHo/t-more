@@ -9,7 +9,7 @@ import { useNamespace, useLocale } from '@tailor-more/t-more-hooks'
 import type { DropdownOption, TNode } from 'tdesign-vue-next'
 
 import '@tailor-more/t-more-theme-chalk/button-dropdown.less'
-import { deleteObjectKeys, getFirstDefined } from '@tailor-more/t-more-utils'
+import { deleteOwnProps, getFirstDefined } from '@tailor-more/t-more-utils'
 import { isFunction, isUndefined } from 'lodash-unified'
 
 export default defineComponent({
@@ -133,7 +133,7 @@ export default defineComponent({
         ...props.buttonProps,
         ...button,
       }
-      deleteObjectKeys(buttonProps, TM_BUTTON_DROPDOWN_ITEM_OWN_KEYS)
+      deleteOwnProps(buttonProps, TM_BUTTON_DROPDOWN_ITEM_OWN_KEYS)
       return buttonProps
     }
     const renderButtons = () => {

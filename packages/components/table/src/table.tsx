@@ -38,7 +38,7 @@ import {
 } from '@tailor-more/t-more-components'
 import { SCREEN_WIDTH } from '@tailor-more/t-more-constants'
 import { useNamespace } from '@tailor-more/t-more-hooks'
-import { debugWarn, deleteObjectKeys } from '@tailor-more/t-more-utils'
+import { debugWarn, deleteOwnProps } from '@tailor-more/t-more-utils'
 
 import type {
   EnhancedTableProps,
@@ -415,7 +415,7 @@ export default defineComponent({
         ...instance?.vnode.props,
       }
       // 这里需要删除不是EnhancedTable的属性
-      deleteObjectKeys(tProps, TM_TABLE_OWN_KEYS)
+      deleteOwnProps(tProps, TM_TABLE_OWN_KEYS)
       return (
         <div class={ns.b()}>
           <div class={ns.e('top')}>
