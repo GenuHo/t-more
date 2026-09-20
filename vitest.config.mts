@@ -11,8 +11,8 @@ const tdesignResolver = TDesignResolver({
   resolveIcons: true,
 })
 
-// 纯函数 hook 用例：不挂载组件、不需要 DOM，放 node 项目跑更快，后续逐步补充
-const nodeTests: string[] = []
+// 纯函数用例：不挂载组件、不需要 DOM，放 node 项目跑更快，后续逐步补充
+const nodeTests: string[] = ['packages/utils/__tests__/**/*.test.ts']
 
 export default defineConfig({
   plugins: [
