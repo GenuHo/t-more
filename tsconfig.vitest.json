@@ -4,7 +4,8 @@
     "composite": true,
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "types": ["node"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "bundler"
   },
   "include": ["packages/**/*", "typings/env.d.ts"],
   "exclude": ["node_modules", "**/dist"]
