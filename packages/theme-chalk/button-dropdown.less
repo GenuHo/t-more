@@ -1,8 +1,10 @@
 @import url('./mixins/mixin.less');
 
 // 菜单去掉左右 padding 让菜单项撑满整行，菜单项改用更大的左右 padding 补回缩进
+// 二级菜单容器是 __submenu，不是 __menu
 .@{tm-prefix}-button-dropdown__popup-inner {
-  .@{prefix}-dropdown__menu {
+  .@{prefix}-dropdown__menu,
+  .@{prefix}-dropdown__submenu {
     padding-left: 0;
     padding-right: 0;
 
