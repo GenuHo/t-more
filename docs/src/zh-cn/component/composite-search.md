@@ -44,7 +44,7 @@ title: CompositeSearch
 </template>
 ```
 
-如果默认的清空逻辑不满足需求，可以在 `v-bind` 中覆盖对应属性，例如 `v-bind="{ ...compositeSearchTagsProps, onClear: handleClear }"`。注意不要写成 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"`，该写法会产生重复的 `onClear`（被合并为数组），调用时会报 `onClear is not a function`。
+如果默认的清空逻辑不满足需求，可以在 `v-bind` 中覆盖对应属性，例如 `v-bind="{ ...compositeSearchTagsProps, onClear: handleClear }"`。注意覆盖后默认逻辑不再执行 —— 覆盖 `onClear` 时需要自己调用 `clearSearchPayloads` 清空搜索条件。另外不要写成 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"`，该写法会产生重复的 `onClear`（被合并为数组），调用时会报 `onClear is not a function`。
 
 :::demo
 composite-search/basic

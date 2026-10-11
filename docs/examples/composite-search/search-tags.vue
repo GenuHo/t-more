@@ -43,15 +43,21 @@ const searchFields: TmCompositeSearchFieldItem[] = [
   },
 ]
 
-const { compositeSearchProps, compositeSearchTagsProps, getSearchParams } =
-  useCompositeSearch({
-    searchFields,
-    onSearchChange: (searchParams) => {
-      console.log('searchParams: ', searchParams)
-    },
-  })
+const {
+  compositeSearchProps,
+  compositeSearchTagsProps,
+  clearSearchPayloads,
+  getSearchParams,
+} = useCompositeSearch({
+  searchFields,
+  onSearchChange: (searchParams) => {
+    console.log('searchParams: ', searchParams)
+  },
+})
 
+// 覆盖默认的清空逻辑后，需要自己调用 clearSearchPayloads 清空搜索条件
 const handleClear = () => {
   console.log('clear')
+  clearSearchPayloads()
 }
 </script>
