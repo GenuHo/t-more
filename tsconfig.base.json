@@ -15,15 +15,6 @@
     "removeComments": false,
     "rootDir": ".",
     "types": [],
-    "paths": {
-      "@tailor-more/t-more-components": ["packages/components"],
-      "@tailor-more/t-more-utils": ["packages/utils"],
-      "@tailor-more/t-more-hooks": ["packages/hooks"],
-      "@tailor-more/t-more-directives": ["packages/directives"],
-      "@tailor-more/t-more-constants": ["packages/constants"],
-      "@tailor-more/t-more-locale": ["packages/locale"],
-      "@tailor-more/t-more": ["packages/t-more"]
-    },
-    "preserveSymlinks": true
+    "paths": {}
   }
 }

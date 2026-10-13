@@ -1,6 +1,6 @@
 import type { SetupContext } from 'vue'
 import { h } from 'vue'
-import { isString, isFunction } from 'lodash-es'
+import { isString, isFunction } from 'lodash-unified'
 
 import type { TableRowData, BaseTableColumns } from 'tdesign-vue-next'
 import type { TmTableCol } from '../table-type'
