@@ -11,12 +11,15 @@ export default [
   { files: ['**/*.{js,mjs,cjs,ts,tsx,vue}'] },
   {
     ignores: [
-      'node_modules',
-      'dist',
-      'components.d.ts',
-      'auto-imports.d.ts',
+      // 不带 / 的模式只匹配根层，子包的产物必须写成 **/
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/components.d.ts',
+      '**/auto-imports.d.ts',
+      '**/*.tsbuildinfo',
+      '**/.vitepress/cache/**',
       'pnpm-lock.yaml',
-      'docs/.vitepress/cache/*',
       '!.*',
     ],
   },
