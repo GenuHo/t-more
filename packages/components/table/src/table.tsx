@@ -60,7 +60,7 @@ import { isNumber, isString } from 'lodash-unified'
 
 import '@tailor-more/t-more-theme-chalk/table.less'
 
-export default defineComponent({
+export default defineComponent<TmTableProps>({
   name: 'TmTable',
   props: {
     ...baseTableProps,
