@@ -235,10 +235,6 @@ export default defineComponent<TmTableProps>({
       selfSort.value = undefined
       clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
     }
-    // 清空全部搜索条件：页码由搜索变化统一重置，保留用户选择的分页大小与排序
-    const handleClearSearch = () => {
-      clearSearchPayloads() // 清空搜索条件，会自动触发搜索的
-    }
     const handleSortChange = (
       sort: TableSort | undefined,
       options: SortOptions<TableRowData>,
@@ -451,11 +447,7 @@ export default defineComponent<TmTableProps>({
             )}
             <TmCompositeSearchTags
               ref={tmCompositeSearchTagsRef}
-              {...{
-                // 覆盖原来的onClear
-                ...compositeSearchTagsProps.value,
-                onClear: handleClearSearch,
-              }}
+              {...compositeSearchTagsProps.value}
             ></TmCompositeSearchTags>
           </div>
           <EnhancedTable
