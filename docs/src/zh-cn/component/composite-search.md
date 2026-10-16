@@ -44,7 +44,50 @@ title: CompositeSearch
 </template>
 ```
 
-如果默认的清空逻辑不满足需求，可以在 `v-bind` 中覆盖对应属性，例如 `v-bind="{ ...compositeSearchTagsProps, onClear: handleClear }"`。注意覆盖后默认逻辑不再执行 —— 覆盖 `onClear` 时需要自己调用 `clearSearchPayloads` 清空搜索条件。另外不要写成 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"`，该写法会产生重复的 `onClear`（被合并为数组），调用时会报 `onClear is not a function`。
+### 覆盖默认回调
+
+`compositeSearchProps` / `compositeSearchTagsProps` 里的回调都已有默认实现（即 hook 对应的方法），在 `v-bind` 中覆盖任意一个后，**默认实现就不再执行**，需要自行调用对应的方法：
+
+| 覆盖的回调                            | 默认实现              | 覆盖后需要自己调用                                           |
+| ------------------------------------- | --------------------- | ------------------------------------------------------------ |
+| `onSearch`（compositeSearchProps）    | `addSearchPayload`    | `addSearchPayload(payload)` 或 `setSearchPayloads(payloads)` |
+| `onReset`（compositeSearchProps）     | `removeSearchPayload` | `removeSearchPayload(payload)`                               |
+| `onClose`（compositeSearchTagsProps） | `removeSearchPayload` | `removeSearchPayload(payload)`                               |
+| `onClear`（compositeSearchTagsProps） | `clearSearchPayloads` | `clearSearchPayloads()`                                      |
+
+覆盖时用对象展开，把要覆盖的属性写在展开之后：
+
+```vue
+<tm-composite-search v-bind="compositeSearchProps" />
+<tm-composite-search-tags
+  v-bind="{
+    ...compositeSearchTagsProps,
+    onClose: handleClose,
+    onClear: handleClear,
+  }"
+/>
+```
+
+```ts
+const { removeSearchPayload, clearSearchPayloads } = useCompositeSearch({
+  searchFields,
+})
+
+// 覆盖后默认逻辑不再执行，这里要自己移除该标签对应的搜索条件
+const handleClose = (payload: TmCompositeSearchPayload) => {
+  console.log('close', payload.field)
+  removeSearchPayload(payload)
+}
+
+const handleClear = () => {
+  console.log('clear')
+  clearSearchPayloads()
+}
+```
+
+:::warning 不要用 `v-bind` 加单独属性的写法覆盖
+写成 `v-bind="compositeSearchTagsProps" :on-clear="handleClear"` 会出错：两者合并后 `onClear` 变成数组，调用时直接报 `onClear is not a function`。同样的坑对上面另外三个回调一样成立。
+:::
 
 :::demo
 composite-search/basic
